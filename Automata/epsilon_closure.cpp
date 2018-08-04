@@ -12,11 +12,11 @@ class ENFA
         ENFA(int n_s, int n_a)
         {
             num_states = n_s;
-            num_alphabets = n_a + 1;
-            table = vector< vector < vector<int> > >(n_s,vector< vector<int> >(n_a+1,vector<int>(0)));
+            num_alphabets = n_a;
+            table = vector< vector < vector<int> > >(n_s,vector< vector<int> >(n_a,vector<int>(0)));
         }
 
-        void get_nfa()
+        void get_enfa()
         {
             while(true)
             {
@@ -57,15 +57,15 @@ class ENFA
 
         void printENFA()
         {
-            cout << num_states << " " << num_alphabets << endl;
+            printf("\nStates : %d, Alphabet : %d \n",num_states,num_alphabets-1);
             for(int i = 0; i < num_states; i++)
             {
                 for(int j = 0; j < num_alphabets; j++)
                 {
-                    cout << i <<  " " << j << " ";
+                    printf("\ndelta(%d,%d): { ",i,j);
                     for(int k = 0; k < table[i][j].size(); k++)
                         cout << table[i][j][k] << " ";
-                    cout << endl;
+                    cout << "} " << endl;
                 }
             }
         }
@@ -78,7 +78,6 @@ class ENFA
 
             pendingNodes.push(k);
             visited[k] = true;
-            ofstream fout("out.txt");
 
             while(!pendingNodes.empty())
             {
@@ -100,16 +99,47 @@ class ENFA
 
             return closureSet;
         }
+
+        ENFA convert_to_nfa()
+        {
+            ENFA nfa(num_states,num_alphabets);
+            nfa.finalStates = finalStates;
+
+            for(int i = 0; i < num_states; i++)
+            {
+                set<int> closure = closures[i];
+                for(int j = 1; j < num_alphabets; j++)
+                {
+                    vector<int> states;
+                    for(auto it : closure)
+                    {
+                        states.insert(states.end(),table[it][j].begin(),table[it][j].end());
+                    }
+
+                    set<int> stateSet(states.begin(),states.end());
+                    set<int> resultant;
+
+                    //Computing e-closure of this set w.r.t ENFA this
+                    for(auto it : stateSet)
+                    {
+                        resultant.insert(closures[it].begin(),closures[it].end());
+                    }
+                    vector<int> finalAns(resultant.begin(),resultant.end());
+
+                    nfa.table[i][j] = finalAns;
+                }
+            }
+            return nfa;
+        }
 };
 
 int main()
 {
     int n_s,n_a;
-    cout << "\nEnter Number of States and alphabets: ";
     cin >> n_s >> n_a;
 
-    ENFA enfa(n_s,n_a);
-    enfa.get_nfa();
+    ENFA enfa(n_s,n_a + 1);
+    enfa.get_enfa();
 
     for(int i = 0; i < enfa.num_states; i++)
     {
@@ -121,6 +151,11 @@ int main()
         
         enfa.closures.push_back(res);
     }
+
+    cout << "\nGenerating NFA : \n";
+    ENFA nfa = enfa.convert_to_nfa();
+    nfa.printENFA();
+
 
     return 0;
 }
