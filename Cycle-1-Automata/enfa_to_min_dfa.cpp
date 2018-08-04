@@ -37,9 +37,9 @@ class DFA
             printf("\nStates : %d, Alphabet : %d \n",num_states,num_alphabets-1);
             for(int i = 0; i < num_states; i++)
             {
-                for(int j = 0; j < num_alphabets; j++)
+                for(int j = 1; j < num_alphabets; j++)
                 {
-                    printf("\ndelta(%d,%d): %d ",i,j+1,table[i][j]);
+                    printf("\ndelta(%d,%d): %d ",i,j,table[i][j]);
                 }
             }
             printf("\nFinal States : { ");
@@ -48,9 +48,10 @@ class DFA
             cout << "} \n";            
         }
 
-        void minimizeDFA()
+        DFA minimizeDFA()
         {
-
+            DFA B(0,0);
+            return B;
         }
 
 };
@@ -229,15 +230,95 @@ class ENFA
         }
 
         /**
+         * Gets a set of states corresponing to a dfa state
+         * 
+         * */
+
+        set<int> nfa_state(int st)
+        {
+            st++;
+            set<int> states;
+            int i = 31;
+
+            while(i >= 0)
+            {
+                if(st & (1 << i))
+                    states.insert(i);
+                i--;
+            }                
+            return states;
+        }
+
+        /**
+         * Gets an integer that represents a set of states of an nfa
+         * */
+
+        int dfa_state(set<int> states)
+        {
+
+            int reqState = 0;
+            for(auto it : states)
+            {
+                reqState += (int)pow(2,it);
+            }
+
+            return reqState - 1;
+        }
+
+        /**
          * 
          * Only objects of NFA format is allowed to invoke this function
          * 
          * */
 
         DFA convert_to_dfa()
-        {
-            DFA Ba(0,0);
-            return Ba;
+        {   
+            int dfa_states = (int)pow(2,num_states);
+            DFA dfa(dfa_states, num_alphabets);
+
+            for(int i = 0; i < dfa_states-1; i++)
+            {
+                set<int> states_in_nfa = nfa_state(i);
+
+                for(int j = 1; j < num_alphabets; j++)
+                {
+                    vector<int> states;
+                    for(auto it : states_in_nfa)
+                    {
+                        states.insert(states.end(),table[it][j].begin(),table[it][j].end());
+                    }
+
+                    set<int> f(states.begin(),states.end());
+                    if(f.empty())
+                        dfa.table[i][j] = dfa_states - 1;
+                    else
+                    {
+                        dfa.table[i][j] = dfa_state(f);
+                    }
+                }   
+            }
+            //Generate Final states
+            vector<int> nfaFinal(finalStates.begin(),finalStates.end());
+            set<int> fs;
+            int size = finalStates.size();
+
+            //i = 0 gives empty subset.
+            for(int i = 1; i < (1 << size); i++)
+            {
+                set<int> st;
+                int s = size-1;
+                while(s >= 0)
+                {
+                    if(i & (1 << s))
+                        st.insert(nfaFinal[s]);
+                    s--;
+                }
+
+                int dfas = dfa_state(st);
+                fs.insert(dfas);
+            }
+            dfa.finalStates = fs;
+            return dfa;
         }
 };
 
@@ -268,7 +349,11 @@ int main()
 
     cout << "\n\nProblem - 3 : Generating DFA  \n==============================\n";
     DFA dfa = nfa.convert_to_dfa();
+    dfa.printAutomaton();
 
+    // cout << "\n\nProblem - 4 : Generating Minimised DFA  \n========================================\n";
+    // DFA min_dfa = dfa.minimizeDFA();
+    // min_dfa.printAutomaton();
 
     return 0;
 }
