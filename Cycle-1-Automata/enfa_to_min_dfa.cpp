@@ -275,9 +275,10 @@ class ENFA
         {   
             int dfa_states = (int)pow(2,num_states);
             DFA dfa(dfa_states, num_alphabets);
-
+            
             for(int i = 0; i < dfa_states-1; i++)
             {
+                // cout << i << endl;
                 set<int> states_in_nfa = nfa_state(i);
 
                 for(int j = 1; j < num_alphabets; j++)
@@ -297,6 +298,11 @@ class ENFA
                     }
                 }   
             }
+
+            //Dead State Config
+            for(int j = 1; j < num_alphabets; j++)
+                dfa.table[(1 << num_states) - 1][j] = (1 << num_states) - 1;
+
             //Generate Final states
             vector<int> nfaFinal(finalStates.begin(),finalStates.end());
             set<int> fs;
