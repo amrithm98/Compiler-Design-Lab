@@ -275,10 +275,9 @@ class ENFA
         {   
             int dfa_states = (int)pow(2,num_states);
             DFA dfa(dfa_states, num_alphabets);
-            
+
             for(int i = 0; i < dfa_states-1; i++)
             {
-                // cout << i << endl;
                 set<int> states_in_nfa = nfa_state(i);
 
                 for(int j = 1; j < num_alphabets; j++)
