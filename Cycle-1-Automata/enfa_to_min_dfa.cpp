@@ -3,17 +3,62 @@
  * Author : Amrith M
  * Problem : Problems 1-4 In Cycle 1
  * Description : Converts an epsilon-nfa to a minimised dfa
+ * 
  * Class ENFA represents objects of both epsilon-nfa and nfa 
+ * Class DFA represents objects of both dfa and minimised dfa
+ * 
+ * Closure is found using Breadth First Search
+ * After computing closure of every state, they're stored in closures vector
+ * 
+ * 
  * 
  * */
 
 #include <bits/stdc++.h>
 using namespace std;
 
+//Must be declared First
+class DFA
+{
+    public:
+        int num_states, num_alphabets;
+        vector< vector<int> > table;
+        set<int> finalStates;
+
+        DFA(int n_s,int n_a)
+        {
+            num_states = n_s;
+            num_alphabets = n_a;
+            table = vector< vector<int> >(n_s, vector<int>(n_a));
+        }
+
+        void printAutomaton()
+        {
+            printf("\nStates : %d, Alphabet : %d \n",num_states,num_alphabets-1);
+            for(int i = 0; i < num_states; i++)
+            {
+                for(int j = 0; j < num_alphabets; j++)
+                {
+                    printf("\ndelta(%d,%d): %d ",i,j+1,table[i][j]);
+                }
+            }
+            printf("\nFinal States : { ");
+            for(auto it : finalStates)
+                cout << it << " ";
+            cout << "} \n";            
+        }
+
+        void minimizeDFA()
+        {
+
+        }
+
+};
+
 class ENFA
 {
     public:
-        int num_states,num_alphabets;
+        int num_states, num_alphabets;
         set<int> finalStates;
         vector< vector< vector<int> > > table;
         vector< set<int> > closures;
@@ -24,6 +69,13 @@ class ENFA
             num_alphabets = n_a;
             table = vector< vector < vector<int> > >(n_s,vector< vector<int> >(n_a,vector<int>(0)));
         }
+
+        /**
+         * Reads only transitions that exist and has the format :
+         * state symbol transitions
+         * Eg : 0 1 1 2 3 => delta(0,1) = { 1 2 3}
+         * 
+         * */
 
         void get_automaton()
         {
@@ -64,6 +116,12 @@ class ENFA
             }
         }
 
+        /**
+         * Prints the transition function of the automaton
+         * 
+         * 
+         * */
+
         void printAutomaton()
         {
             printf("\nStates : %d, Alphabet : %d \n",num_states,num_alphabets-1);
@@ -82,6 +140,13 @@ class ENFA
                 cout << it << " ";
             cout << "} \n";            
         }
+
+        /***
+         * 
+         * Computes Closure using Breadth First Search
+         * 
+         * 
+         * */
 
         set<int> compute_closure(int k)
         {
@@ -112,6 +177,12 @@ class ENFA
 
             return closureSet;
         }
+
+        /****
+         * 
+         * Converts ENFA to NFA using the standard algorithm.Updates final states also.
+         * returns and object of ENFA which represents the requied nfa.
+         * */
 
         ENFA convert_to_nfa()
         {
@@ -156,6 +227,18 @@ class ENFA
             }
             return nfa;
         }
+
+        /**
+         * 
+         * Only objects of NFA format is allowed to invoke this function
+         * 
+         * */
+
+        DFA convert_to_dfa()
+        {
+            DFA Ba(0,0);
+            return Ba;
+        }
 };
 
 int main()
@@ -184,6 +267,7 @@ int main()
     nfa.printAutomaton();
 
     cout << "\n\nProblem - 3 : Generating DFA  \n==============================\n";
+    DFA dfa = nfa.convert_to_dfa();
 
 
     return 0;
