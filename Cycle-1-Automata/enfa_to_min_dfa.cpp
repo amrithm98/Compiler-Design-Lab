@@ -25,6 +25,11 @@ class DFA
         vector< vector<int> > table;
         set<int> finalStates;
 
+        DFA()
+        {
+
+        }
+
         DFA(int n_s,int n_a)
         {
             num_states = n_s;
@@ -34,24 +39,39 @@ class DFA
 
         void printAutomaton()
         {
+            ofstream outfile;
+            outfile.open("prob2_op");
             printf("\nStates : %d, Alphabet : %d \n",num_states,num_alphabets-1);
+            outfile << num_states << " " << num_alphabets-1 << endl;
+
             for(int i = 0; i < num_states; i++)
-            {
+            {   
                 for(int j = 1; j < num_alphabets; j++)
-                {
+                {   
                     printf("\ndelta(%d,%d): %d ",i,j,table[i][j]);
+                    outfile << i << " " << j << " " << table[i][j] << "\n";
                 }
             }
+
             printf("\nFinal States : { ");
+            outfile << "F\n";
+            
             for(auto it : finalStates)
+            {
                 cout << it << " ";
-            cout << "} \n";            
+                outfile << it << endl;
+            }
+            cout << "} \n";    
+            outfile.close();        
         }
 
         DFA minimizeDFA()
         {
-            DFA B(0,0);
-            return B;
+            DFA minDfa;
+            vector< vector<int> > stateSets(2,vector<int> (0));
+
+
+            return minDfa;
         }
 
 };
@@ -278,6 +298,7 @@ class ENFA
 
             for(int i = 0; i < dfa_states-1; i++)
             {
+                cout << i << endl;
                 set<int> states_in_nfa = nfa_state(i);
 
                 for(int j = 1; j < num_alphabets; j++)
@@ -362,4 +383,3 @@ int main()
 
     return 0;
 }
-
