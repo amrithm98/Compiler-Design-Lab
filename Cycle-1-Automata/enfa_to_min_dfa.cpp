@@ -1,3 +1,12 @@
+/****
+ * 
+ * Author : Amrith M
+ * Problem : Problems 1-4 In Cycle 1
+ * Description : Converts an epsilon-nfa to a minimised dfa
+ * Class ENFA represents objects of both epsilon-nfa and nfa 
+ * 
+ * */
+
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -5,7 +14,7 @@ class ENFA
 {
     public:
         int num_states,num_alphabets;
-        vector<int> finalStates;
+        set<int> finalStates;
         vector< vector< vector<int> > > table;
         vector< set<int> > closures;
 
@@ -16,7 +25,7 @@ class ENFA
             table = vector< vector < vector<int> > >(n_s,vector< vector<int> >(n_a,vector<int>(0)));
         }
 
-        void get_enfa()
+        void get_automaton()
         {
             while(true)
             {
@@ -51,11 +60,11 @@ class ENFA
             {
                 int a;
                 cin >> a;
-                finalStates.push_back(a);
+                finalStates.insert(a);
             }
         }
 
-        void printENFA()
+        void printAutomaton()
         {
             printf("\nStates : %d, Alphabet : %d \n",num_states,num_alphabets-1);
             for(int i = 0; i < num_states; i++)
@@ -68,6 +77,10 @@ class ENFA
                     cout << "} " << endl;
                 }
             }
+            printf("\nFinal States : { ");
+            for(auto it : finalStates)
+                cout << it << " ";
+            cout << "} \n";            
         }
 
         set<int> compute_closure(int k)
@@ -124,9 +137,21 @@ class ENFA
                     {
                         resultant.insert(closures[it].begin(),closures[it].end());
                     }
+
                     vector<int> finalAns(resultant.begin(),resultant.end());
 
                     nfa.table[i][j] = finalAns;
+                }
+            }
+
+            for(auto it : finalStates)
+            {
+                for(int i = 0; i < num_states; i++)
+                {
+                    if(closures[i].find(it) != closures[i].end())
+                    {
+                        nfa.finalStates.insert(i);
+                    } 
                 }
             }
             return nfa;
@@ -139,22 +164,26 @@ int main()
     cin >> n_s >> n_a;
 
     ENFA enfa(n_s,n_a + 1);
-    enfa.get_enfa();
+    enfa.get_automaton();
+
+    cout << "\nProblem - 1 : Epsilon Closure of e-nfa\n========================================\n";
 
     for(int i = 0; i < enfa.num_states; i++)
     {
         set<int> res = enfa.compute_closure(i);
-        printf("\n%d : ",i+1);
+        printf("\n%d : { ",i+1);
 
         for(auto it : res)
             cout << it+1 << " ";
-        
+        cout << " }";
         enfa.closures.push_back(res);
     }
 
-    cout << "\nGenerating NFA : \n";
+    cout << "\n\nProblem - 2 : Generating NFA  \n==============================\n";
     ENFA nfa = enfa.convert_to_nfa();
-    nfa.printENFA();
+    nfa.printAutomaton();
+
+    cout << "\n\nProblem - 3 : Generating DFA  \n==============================\n";
 
 
     return 0;
