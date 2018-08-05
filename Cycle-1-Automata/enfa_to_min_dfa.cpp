@@ -39,30 +39,30 @@ class DFA
 
         void printAutomaton()
         {
-            ofstream outfile;
-            outfile.open("prob2_op");
+            // ofstream outfile;
+            // outfile.open("prob2_op");
             printf("\nStates : %d, Alphabet : %d \n",num_states,num_alphabets-1);
-            outfile << num_states << " " << num_alphabets-1 << endl;
+            // outfile << num_states << " " << num_alphabets-1 << endl;
 
             for(int i = 0; i < num_states; i++)
             {   
                 for(int j = 1; j < num_alphabets; j++)
                 {   
                     printf("\ndelta(%d,%d): %d ",i,j,table[i][j]);
-                    outfile << i << " " << j << " " << table[i][j] << "\n";
+                    // outfile << i << " " << j << " " << table[i][j] << "\n";
                 }
             }
 
             printf("\nFinal States : { ");
-            outfile << "F\n";
+            // outfile << "F\n";
             
             for(auto it : finalStates)
             {
                 cout << it << " ";
-                outfile << it << endl;
+                // outfile << it << endl;
             }
             cout << "} \n";    
-            outfile.close();        
+            // outfile.close();        
         }
 
         DFA minimizeDFA()
@@ -74,6 +74,14 @@ class DFA
             return minDfa;
         }
 
+};
+
+class Triplet
+{
+    public:
+        int start;
+        int symbol;
+        int next;
 };
 
 class ENFA
@@ -216,11 +224,15 @@ class ENFA
                 for(int j = 1; j < num_alphabets; j++)
                 {
                     vector<int> states;
+                    // printf("\nClosure : ");
                     for(auto it : closure)
                     {
+                        cout << it << " ";
                         states.insert(states.end(),table[it][j].begin(),table[it][j].end());
                     }
-
+                    // printf("\nStateSet %d %d \n",i,j);
+                    // for(auto it : states)
+                    //     cout << it << endl;
                     set<int> stateSet(states.begin(),states.end());
                     set<int> resultant;
 
@@ -298,9 +310,8 @@ class ENFA
 
             for(int i = 0; i < dfa_states-1; i++)
             {
-                cout << i << endl;
                 set<int> states_in_nfa = nfa_state(i);
-
+                    
                 for(int j = 1; j < num_alphabets; j++)
                 {
                     vector<int> states;
@@ -323,30 +334,135 @@ class ENFA
             for(int j = 1; j < num_alphabets; j++)
                 dfa.table[(1 << num_states) - 1][j] = (1 << num_states) - 1;
 
-            //Generate Final states
-            vector<int> nfaFinal(finalStates.begin(),finalStates.end());
-            set<int> fs;
-            int size = finalStates.size();
 
-            //i = 0 gives empty subset.
-            for(int i = 1; i < (1 << size); i++)
+            /***
+             * Generate Final states
+             * Get all subsets that contain any of the final states of the nfa
+             * 
+             * */
+            
+            set<int> actualFinal;
+            for(int i = 0; i < dfa_states-1; i++)
             {
-                set<int> st;
-                int s = size-1;
-                while(s >= 0)
+                set<int> fs = nfa_state(i);
+                for(auto it : finalStates)
                 {
-                    if(i & (1 << s))
-                        st.insert(nfaFinal[s]);
-                    s--;
+                    if(fs.find(it) != fs.end())
+                    {
+                        actualFinal.insert(i);
+                    }
                 }
-
-                int dfas = dfa_state(st);
-                fs.insert(dfas);
             }
-            dfa.finalStates = fs;
-            return dfa;
+
+            //Generate Final states
+            // vector<int> nfaFinal(finalStates.begin(),finalStates.end());
+            // set<int> fs;
+            // int size = finalStates.size();
+
+            // //i = 0 gives empty subset.
+            // for(int i = 1; i < (1 << size); i++)
+            // {
+            //     set<int> st;
+            //     int s = size-1;
+
+            //     while(s >= 0)
+            //     {
+            //         if(i & (1 << s))
+            //             st.insert(nfaFinal[s]);
+            //         s--;
+            //     }
+
+            //     int dfas = dfa_state(st);
+            //     fs.insert(dfas);
+            // }
+            // dfa.finalStates = fs;
+            // dfa.printAutomaton();
+
+            dfa.finalStates = actualFinal;
+            //dfa.printAutomaton();
+
+            /**
+             * Doing BFS To optimse state Count
+             * */
+
+            queue<int> q;
+            vector<bool> visited(dfa_states,0);
+
+            q.push(0);
+            visited[0] = 1;
+
+            vector< int > req_states;
+            int new_state_count = 0;
+
+            while(!q.empty())
+            {
+                int curr = q.front();
+                q.pop(); 
+
+                req_states.push_back(curr);
+
+                new_state_count++;
+
+                for(int i = 1; i < num_alphabets; i++)
+                {
+                    int next = dfa.table[curr][i];
+                    if(!visited[next])
+                    {
+                        visited[next] = 1;
+                        q.push(next);
+
+                    }
+                }
+            }
+
+            printf("\nNumber of States in BFS Optimised DFA is : %d \n",new_state_count);
+
+            
+            unordered_map<int,int> mappings;
+            int index = 0;
+            for(auto it : req_states)
+            {
+                if(mappings.find(it) == mappings.end())
+                {
+                    mappings[it] = index++;
+                }
+            }
+
+            DFA optimised(index,num_alphabets);
+
+            for(auto it : req_states)
+            {
+                for(int i = 1; i < num_alphabets; i++)
+                {
+                    optimised.table[mappings[it]][i] = mappings[dfa.table[it][i]];
+                }
+            }
+
+            for(auto it : dfa.finalStates)
+            {
+                if(mappings.find(it) != mappings.end())
+                    (optimised.finalStates).insert(mappings[it]);
+            }
+
+            // for(auto it : req_states)
+            // {
+            //     for(int i = 1; i < num_alphabets; i++)
+            //     {
+            //         printf("\ndelta(%d,%d): %d ",it,i,dfa.table[it][i]);
+            //     }
+            // }
+            // cout << "\nFinal : ";
+            // for(auto it : req_states)
+            //     if(dfa.finalStates.find(it) != dfa.finalStates.end())
+            //         cout << it << " ";
+
+            // cout << endl;
+
+            return optimised;
         }
 };
+
+
 
 int main()
 {
@@ -361,10 +477,10 @@ int main()
     for(int i = 0; i < enfa.num_states; i++)
     {
         set<int> res = enfa.compute_closure(i);
-        printf("\n%d : { ",i+1);
+        printf("\n%d : { ",i);
 
         for(auto it : res)
-            cout << it+1 << " ";
+            cout << it << " ";
         cout << " }";
         enfa.closures.push_back(res);
     }
