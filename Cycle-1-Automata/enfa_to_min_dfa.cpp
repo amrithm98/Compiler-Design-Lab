@@ -39,30 +39,24 @@ class DFA
 
         void printAutomaton()
         {
-            // ofstream outfile;
-            // outfile.open("prob2_op");
+
             printf("\nStates : %d, Alphabet : %d \n",num_states,num_alphabets-1);
-            // outfile << num_states << " " << num_alphabets-1 << endl;
 
             for(int i = 0; i < num_states; i++)
             {   
                 for(int j = 1; j < num_alphabets; j++)
                 {   
                     printf("\ndelta(%d,%d): %d ",i,j,table[i][j]);
-                    // outfile << i << " " << j << " " << table[i][j] << "\n";
                 }
             }
 
             printf("\nFinal States : { ");
-            // outfile << "F\n";
             
             for(auto it : finalStates)
             {
                 cout << it << " ";
-                // outfile << it << endl;
             }
             cout << "} \n";    
-            // outfile.close();        
         }
 
         DFA minimizeDFA()
@@ -224,15 +218,11 @@ class ENFA
                 for(int j = 1; j < num_alphabets; j++)
                 {
                     vector<int> states;
-                    // printf("\nClosure : ");
                     for(auto it : closure)
                     {
-                        cout << it << " ";
                         states.insert(states.end(),table[it][j].begin(),table[it][j].end());
                     }
-                    // printf("\nStateSet %d %d \n",i,j);
-                    // for(auto it : states)
-                    //     cout << it << endl;
+
                     set<int> stateSet(states.begin(),states.end());
                     set<int> resultant;
 
@@ -354,30 +344,6 @@ class ENFA
                 }
             }
 
-            //Generate Final states
-            // vector<int> nfaFinal(finalStates.begin(),finalStates.end());
-            // set<int> fs;
-            // int size = finalStates.size();
-
-            // //i = 0 gives empty subset.
-            // for(int i = 1; i < (1 << size); i++)
-            // {
-            //     set<int> st;
-            //     int s = size-1;
-
-            //     while(s >= 0)
-            //     {
-            //         if(i & (1 << s))
-            //             st.insert(nfaFinal[s]);
-            //         s--;
-            //     }
-
-            //     int dfas = dfa_state(st);
-            //     fs.insert(dfas);
-            // }
-            // dfa.finalStates = fs;
-            // dfa.printAutomaton();
-
             dfa.finalStates = actualFinal;
             //dfa.printAutomaton();
 
@@ -417,6 +383,7 @@ class ENFA
 
             printf("\nNumber of States in BFS Optimised DFA is : %d \n",new_state_count);
 
+            //Mapping Arbitrary states to 0 - n
             
             unordered_map<int,int> mappings;
             int index = 0;
@@ -444,19 +411,27 @@ class ENFA
                     (optimised.finalStates).insert(mappings[it]);
             }
 
-            // for(auto it : req_states)
-            // {
-            //     for(int i = 1; i < num_alphabets; i++)
-            //     {
-            //         printf("\ndelta(%d,%d): %d ",it,i,dfa.table[it][i]);
-            //     }
-            // }
-            // cout << "\nFinal : ";
-            // for(auto it : req_states)
-            //     if(dfa.finalStates.find(it) != dfa.finalStates.end())
-            //         cout << it << " ";
 
-            // cout << endl;
+            /**
+             * 
+             * Print Without Mapping.
+             * 
+
+            for(auto it : req_states)
+            {
+                for(int i = 1; i < num_alphabets; i++)
+                {
+                    printf("\ndelta(%d,%d): %d ",it,i,dfa.table[it][i]);
+                }
+            }
+            cout << "\nFinal : ";
+            for(auto it : req_states)
+                if(dfa.finalStates.find(it) != dfa.finalStates.end())
+                    cout << it << " ";
+
+            cout << endl;
+
+            * */
 
             return optimised;
         }
