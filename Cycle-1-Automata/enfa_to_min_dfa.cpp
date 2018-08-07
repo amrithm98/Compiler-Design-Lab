@@ -70,14 +70,6 @@ class DFA
 
 };
 
-class Triplet
-{
-    public:
-        int start;
-        int symbol;
-        int next;
-};
-
 class ENFA
 {
     public:
@@ -290,6 +282,7 @@ class ENFA
         /**
          * 
          * Only objects of NFA format is allowed to invoke this function
+         * SUBSET CONSTRUCTION O(n.2^n)
          * 
          * */
 
@@ -415,7 +408,9 @@ class ENFA
             /**
              * 
              * Print Without Mapping.
-             * 
+             * */
+
+            /*
 
             for(auto it : req_states)
             {
@@ -431,9 +426,73 @@ class ENFA
 
             cout << endl;
 
-            * */
+            */
 
             return optimised;
+        }
+
+        DFA convert_to_dfa_lazy()
+        {
+            DFA dfa(0, num_alphabets);
+
+            vector < set<int> > lazySet;
+
+            int i = 0;
+
+            lazySet.push_back({0});
+
+            dfa.table.push_back(vector<int>(num_alphabets,-1));
+
+            if(finalStates.find(0) != finalStates.end())
+                dfa.finalStates.insert(0);
+
+            while(i < lazySet.size())
+            {
+                for(int j = 1; j < num_alphabets; j++)
+                {
+                    int new_state = -1;
+
+                    set<int> reachable;
+                    for(auto it : lazySet[i])
+                    {
+                        reachable.insert(table[it][j].begin(),table[it][j].end());
+                    }
+
+                    
+                    for(int x = 0; x < lazySet.size(); x++)
+                    {
+                        if(reachable == lazySet[x])
+                        {
+                            new_state = x;
+                            break;
+                        }
+                    }
+
+                    if(new_state == -1)
+                    {
+                        new_state = lazySet.size();
+                        lazySet.push_back(reachable);
+
+                        for(auto it : reachable)
+                        {
+                            if(finalStates.find(it) != finalStates.end())
+                            {
+                                dfa.finalStates.insert(new_state);
+                                break;
+                            }
+                        }
+
+                        dfa.table.push_back(vector<int>(num_alphabets,-1));
+
+                    }
+
+                    dfa.table[i][j] = new_state;
+                }
+
+                i++;
+            }
+            dfa.num_states = dfa.table.size();
+            return dfa;
         }
 };
 
@@ -465,7 +524,7 @@ int main()
     nfa.printAutomaton();
 
     cout << "\n\nProblem - 3 : Generating DFA  \n==============================\n";
-    DFA dfa = nfa.convert_to_dfa();
+    DFA dfa = nfa.convert_to_dfa_lazy();
     dfa.printAutomaton();
 
     // cout << "\n\nProblem - 4 : Generating Minimised DFA  \n========================================\n";
