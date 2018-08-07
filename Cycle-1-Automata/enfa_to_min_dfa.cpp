@@ -61,10 +61,78 @@ class DFA
 
         DFA minimizeDFA()
         {
-            DFA minDfa;
+            DFA minDfa(0,num_alphabets);
             vector< vector<int> > stateSets(2,vector<int> (0));
+            vector< vector<int> > m(num_states, vector<int> (num_states,0));
 
+            bool f = 1;
+            for(int i = 0; i < num_states; i++)
+            {
+                for(int j = 0; j < num_states; j++)
+                {
+                    if(finalStates.find(i) != finalStates.end() && finalStates.find(j) == finalStates.end())
+                    {
+                        m[i][j] = 1;
+                    }
+                    if(finalStates.find(j) != finalStates.end() && finalStates.find(i) == finalStates.end())
+                    {
+                        m[i][j] = 1;
+                    }
+                }
+            }
 
+            while(f)
+            {
+                f = 0;
+
+                for(int i = 0; i < num_states-2; i++)
+                {
+                    for(int j = i+1; j < num_states-1; j++)
+                    {
+                        for(int u = 1; u < num_alphabets; u++)
+                        {
+                            if(m[i][j] == 0 && m[table[i][u]][table[j][u]] == 1)
+                            {
+                                m[i][j] = 1;
+                                f = 1;
+                            }
+                        }
+                    }
+                }
+            }
+
+            set<int> visited, unvisited;
+            set<int> fs;
+
+            for(int i = 0; i < num_states; i++)
+            {
+                for(int j = i; j < num_states; j++)
+                {
+                    if(m[i][j] == 0)
+                    {
+                        if(visited.find(i) == visited.end() && visited.find(j) == visited.end())
+                        {
+                            visited.insert(i);
+                            if(finalStates.find(i) != finalStates.end() || finalStates.find(j) != finalStates.end())
+                            {
+                                fs.insert(i);
+                            }
+                        }
+                    }
+                }
+            }
+
+            for(int i = 0; i < table.size(); i++)
+            {
+                if(visited.find(i) != visited.end())
+                {
+                    minDfa.table.push_back(table[i]);
+                }
+            }
+
+            minDfa.num_states = table.size();
+            minDfa.finalStates = fs;
+            
             return minDfa;
         }
 
@@ -527,9 +595,9 @@ int main()
     DFA dfa = nfa.convert_to_dfa_lazy();
     dfa.printAutomaton();
 
-    // cout << "\n\nProblem - 4 : Generating Minimised DFA  \n========================================\n";
-    // DFA min_dfa = dfa.minimizeDFA();
-    // min_dfa.printAutomaton();
+    cout << "\n\nProblem - 4 : Generating Minimised DFA  \n========================================\n";
+    DFA min_dfa = dfa.minimizeDFA();
+    min_dfa.printAutomaton();
 
     return 0;
 }
