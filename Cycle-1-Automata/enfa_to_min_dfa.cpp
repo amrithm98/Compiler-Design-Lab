@@ -65,16 +65,41 @@ class DFA
          * 
          * */
 
+        int find(vector<int> &parent, int x, set<int> &path)
+        {
+            path.insert(x);
+            if(x != parent[x])
+            {
+                return find(parent,parent[x],path);
+            }
+            else 
+            {
+                return x;
+            }
+        }
+
+        int find(int x,vector<int> &parent)
+        {
+            if(x == parent[x])
+            {
+                return x;
+            }
+            else
+            {
+                parent[x] = find(parent[x],parent);
+                return parent[x];
+            }
+        }
+
         DFA minimizeDFA()
         {
             DFA minDfa(0,num_alphabets);
-            vector< vector<int> > stateSets(2,vector<int> (0));
             vector< vector<int> > m(num_states, vector<int> (num_states,0));
 
             bool f = 1;
             for(int i = 0; i < num_states; i++)
             {
-                for(int j = 0; j < num_states; j++)
+                for(int j = i + 1 ; j < num_states; j++)
                 {
                     if(finalStates.find(i) != finalStates.end() && finalStates.find(j) == finalStates.end())
                     {
@@ -88,20 +113,28 @@ class DFA
                 }
             }
 
+
             while(f)
             {
                 f = 0;
 
-                for(int i = 0; i < num_states-2; i++)
+                for(int i = 0; i < num_states; i++)
                 {
-                    for(int j = i+1; j < num_states-1; j++)
+                    for(int j = i + 1; j < num_states; j++)
                     {
                         for(int u = 1; u < num_alphabets; u++)
                         {
-                            if(m[i][j] == 0 && m[table[i][u]][table[j][u]] == 1)
+                            int i_u = table[i][u];
+                            int j_u = table[j][u];
+
+                            if(i_u > j_u)   
+                                swap(i_u,j_u);
+
+                            if(m[i][j] == 0 && m[i_u][j_u] == 1)
                             {
                                 m[i][j] = 1;
                                 f = 1;
+                                break;
                             }
                         }
                     }
@@ -111,35 +144,60 @@ class DFA
             set<int> visited, unvisited;
             set<int> fs;
 
+            vector<int> parent(num_states);
             for(int i = 0; i < num_states; i++)
             {
-                for(int j = i; j < num_states; j++)
+                parent[i] = i;
+            }
+
+            for(int i = 0; i < num_states; i++)
+            {
+                for(int j = i+1 ; j < num_states; j++)
                 {
                     if(m[i][j] == 0)
                     {
-                        if(visited.find(i) == visited.end() && visited.find(j) == visited.end())
-                        {
-                            visited.insert(i);
-                            if(finalStates.find(i) != finalStates.end() || finalStates.find(j) != finalStates.end())
-                            {
-                                fs.insert(i);
-                            }
-                        }
+                        parent[j] = i;
                     }
                 }
             }
+            
+            map<int, set<int> > mappings;
 
-            for(int i = 0; i < table.size(); i++)
+            for(int i = 0; i < num_states; i++)
             {
-                if(visited.find(i) != visited.end())
+                set<int> path;
+                int x = find(parent,i,path);
+                mappings[x] = path;
+            }
+
+            minDfa.num_states = mappings.size();
+            minDfa.table = vector<vector<int>>(num_states,vector<int>(num_alphabets));
+
+            map<int,int> numberMap;
+            int index = 0;
+
+            for(auto it : mappings)
+            {
+                numberMap[it.first] = index++;
+            }
+
+            for(auto it : mappings)
+            {
+                for(int j = 1; j < num_alphabets; j++)
                 {
-                    minDfa.table.push_back(table[i]);
+                    int start = *(it.second.begin());
+                    int end = table[start][j];
+                    int parent_element = find(end,parent);
+
+                    minDfa.table[numberMap[it.first]][j] = numberMap[parent_element];
                 }
             }
 
-            minDfa.num_states = table.size();
-            minDfa.finalStates = fs;
-            
+            for(auto it : finalStates)
+            {
+                minDfa.finalStates.insert(numberMap[find(it,parent)]);
+            }
+                        
             return minDfa;
         }
 
