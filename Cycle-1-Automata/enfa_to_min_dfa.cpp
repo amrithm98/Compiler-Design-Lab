@@ -27,7 +27,7 @@ class DFA
 
         DFA()
         {
-
+            //Default Constructor
         }
 
         DFA(int n_s,int n_a)
@@ -46,7 +46,7 @@ class DFA
             {   
                 for(int j = 1; j < num_alphabets; j++)
                 {   
-                    printf("\ndelta(%d,%d): %d ",i,j,table[i][j]);
+                    printf("\ndelta(%d, %d): %d ",i,j,table[i][j]);
                 }
             }
 
@@ -58,6 +58,12 @@ class DFA
             }
             cout << "} \n";    
         }
+
+        /***
+         * 
+         * Minimise DFA using Myhill-Nerode THeorem
+         * 
+         * */
 
         DFA minimizeDFA()
         {
@@ -74,6 +80,7 @@ class DFA
                     {
                         m[i][j] = 1;
                     }
+                    
                     if(finalStates.find(j) != finalStates.end() && finalStates.find(i) == finalStates.end())
                     {
                         m[i][j] = 1;
@@ -265,6 +272,7 @@ class ENFA
          * 
          * Converts ENFA to NFA using the standard algorithm.Updates final states also.
          * returns and object of ENFA which represents the requied nfa.
+         * 
          * */
 
         ENFA convert_to_nfa()
@@ -406,10 +414,13 @@ class ENFA
             }
 
             dfa.finalStates = actualFinal;
+
             //dfa.printAutomaton();
 
             /**
              * Doing BFS To optimse state Count
+             * Collecting all states that has a path from the start state and mapping them from 0 to size
+             * 
              * */
 
             queue<int> q;
@@ -475,7 +486,8 @@ class ENFA
 
             /**
              * 
-             * Print Without Mapping.
+             * Print Without Mapping. (states will get weird numbers)
+             * 
              * */
 
             /*
@@ -498,6 +510,13 @@ class ENFA
 
             return optimised;
         }
+
+        /***
+         * 
+         * Converts NFA to DFA using Lazy Construction
+         * Creates a new state only if there is a path to it
+         * 
+         * */
 
         DFA convert_to_dfa_lazy()
         {
@@ -559,9 +578,11 @@ class ENFA
 
                 i++;
             }
+
             dfa.num_states = dfa.table.size();
             return dfa;
         }
+
 };
 
 
@@ -574,7 +595,7 @@ int main()
     ENFA enfa(n_s,n_a + 1);
     enfa.get_automaton();
 
-    cout << "\nProblem - 1 : Epsilon Closure of e-nfa\n========================================\n";
+    cout << "\n\nProblem - 1 : Epsilon Closure of e-nfa\n========================================\n";
 
     for(int i = 0; i < enfa.num_states; i++)
     {
@@ -584,6 +605,7 @@ int main()
         for(auto it : res)
             cout << it << " ";
         cout << " }";
+
         enfa.closures.push_back(res);
     }
 
