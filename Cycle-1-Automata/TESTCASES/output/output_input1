@@ -1,0 +1,90 @@
+
+
+Problem - 1 : Epsilon Closure of e-nfa
+========================================
+
+0 : { 0 1 2 3  }
+1 : { 1  }
+2 : { 2 3  }
+3 : { 3  }
+
+Problem - 2 : Generating NFA  
+==============================
+
+States : 4, Alphabet : 2 
+
+delta(0,0): { } 
+
+delta(0,1): { 1 2 3 } 
+
+delta(0,2): { 3 } 
+
+delta(1,0): { } 
+
+delta(1,1): { } 
+
+delta(1,2): { 3 } 
+
+delta(2,0): { } 
+
+delta(2,1): { } 
+
+delta(2,2): { 3 } 
+
+delta(3,0): { } 
+
+delta(3,1): { } 
+
+delta(3,2): { } 
+
+Final States : { 0 2 3 } 
+
+
+Problem - 3 : Generating DFA  
+==============================
+
+States : 4, Alphabet : 2 
+
+delta(1, 1): 2 
+delta(1, 2): 3 
+delta(2, 1): 4 
+delta(2, 2): 3 
+delta(3, 1): 4 
+delta(3, 2): 4 
+delta(4, 1): 4 
+delta(4, 2): 4 
+Final States : { 1 2 3 } 
+
+
+Problem - 4 : Generating Minimised DFA  
+========================================
+
+M-N Table(Initial) : 
+0 0 1 
+0 1 
+1 
+
+
+M-N Table : 
+1 1 1 
+1 1 
+1 
+
+
+Equivalent States : 
+0 : 0 
+1 : 1 
+2 : 2 
+3 : 3 
+
+States : 4, Alphabet : 2 
+
+delta(1, 1): 2 
+delta(1, 2): 3 
+delta(2, 1): 4 
+delta(2, 2): 3 
+delta(3, 1): 4 
+delta(3, 2): 4 
+delta(4, 1): 4 
+delta(4, 2): 4 
+Final States : { 1 2 3 } 

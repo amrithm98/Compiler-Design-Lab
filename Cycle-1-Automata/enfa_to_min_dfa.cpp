@@ -46,7 +46,7 @@ class DFA
             {   
                 for(int j = 1; j < num_alphabets; j++)
                 {   
-                    printf("\ndelta(%d, %d): %d ",i,j,table[i][j]);
+                    printf("\ndelta(%d, %d): %d ",i+1,j,table[i][j]+1);
                 }
             }
 
@@ -54,7 +54,7 @@ class DFA
             
             for(auto it : finalStates)
             {
-                cout << it << " ";
+                cout << it+1 << " ";
             }
             cout << "} \n";    
         }
@@ -113,6 +113,14 @@ class DFA
                 }
             }
 
+            cout << "\nM-N Table(Initial) : \n";
+            for(int i = 0; i < num_states; i++)
+            {
+                for(int j = i + 1 ; j < num_states; j++)
+                    cout << m[i][j] << " ";
+                cout << endl; 
+            }
+
 
             while(f)
             {
@@ -139,6 +147,14 @@ class DFA
                         }
                     }
                 }
+            }
+
+            cout << "\nM-N Table : \n";
+            for(int i = 0; i < num_states; i++)
+            {
+                for(int j = i + 1 ; j < num_states; j++)
+                    cout << m[i][j] << " ";
+                cout << endl; 
             }
 
             set<int> visited, unvisited;
@@ -168,6 +184,15 @@ class DFA
                 set<int> path;
                 int x = find(parent,i,path);
                 mappings[x] = path;
+            }
+            
+            cout << "\nEquivalent States : \n";
+            for(auto it : mappings)
+            {
+                cout << it.first << " : ";
+                for(auto it1 : it.second)
+                    cout << it1 << " ";
+                cout << endl;
             }
 
             minDfa.num_states = mappings.size();
@@ -587,7 +612,7 @@ class ENFA
             lazySet.push_back({0});
 
             dfa.table.push_back(vector<int>(num_alphabets,-1));
-
+            
             if(finalStates.find(0) != finalStates.end())
                 dfa.finalStates.insert(0);
 
