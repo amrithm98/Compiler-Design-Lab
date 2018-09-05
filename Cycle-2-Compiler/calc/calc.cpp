@@ -11,6 +11,13 @@ int main(void)
 	ntoken = yylex();
 	while(ntoken)
 	{
+		printf("\nToken : %d Value : %s Line : %d",ntoken,yytext,yylineno);
+		ntoken = yylex();
+	}
+
+	/*while(ntoken)
+	{
+		printf("\nToken :  %d",ntoken);
 		if(ntoken == KEYWORD)
 		{	
 			ntoken = yylex();
@@ -40,7 +47,7 @@ int main(void)
 			printf(" %s ",yytext);
 		}
 		ntoken = yylex();
-	}
+	}*/
 	return 0;
 }
 
