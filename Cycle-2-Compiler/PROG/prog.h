@@ -13,3 +13,5 @@
 #define DIV_OP 		13
 #define EQU_OP		14
 #define LITERAL		15
+#define DOT         16
+#define ERROR       99

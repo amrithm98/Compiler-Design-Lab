@@ -1,7 +1,7 @@
 prog
 	integer a,b
 	begin
-		read readn;
+		read n;
 
 		if a < 10 
 		then 
