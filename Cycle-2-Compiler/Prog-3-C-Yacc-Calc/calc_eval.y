@@ -14,6 +14,9 @@
 %token <id> identifier
 %type <n> stmt exp term
 %type <idnt> assign
+%right '='
+%left '+' '-'
+%left '*' '/'
 %%
 
 stmt : assign ';' 						{;}
@@ -26,16 +29,18 @@ stmt : assign ';' 						{;}
 assign : identifier '=' exp 			{update($1,$3);}
 ;
 
-exp	: term			{$$=$1;}
-	| exp '+' term	{$$=$1+$3;}
-	| exp '-' term	{$$=$1-$3;}
-	| exp '*' term	{$$=$1*$3;}
-	| exp '/' term	{$$=$1/$3;}
+exp	: term			{$$ = $1;}
+	| '(' exp ')'	{$$ = $2;}
+	| exp '=' exp 	{$$ = $3;}
+	| exp '+' exp	{$$ = $1+$3;}
+	| exp '-' exp	{$$ = $1-$3;}
+	| exp '*' exp	{$$ = $1*$3;}
+	| exp '/' exp	{$$ = $1/$3;}
 ;
 
-term : identifier 	{$$=value($1);}
-	| num			{$$=$1;}
-;
+term : identifier 	{$$ = value($1);}
+	| num			{$$ = $1;}
+; 
 
 %%
 
@@ -44,11 +49,11 @@ int idx(char s)
 	int i = -1;
 	if(islower(s))
 	{
-	    i = s-'a' + 26;
+	    i = s - 'a' + 26;
 	}
 	else if(isupper(s))
 	{
-	    i=s-'A';
+	    i = s-'A';
 	}
 	return i;
 }
@@ -69,7 +74,7 @@ int main(void)
 {
 	int j;
 
-	for(j = 0;j < 52;j++)
+	for(j = 0; j < 52; j++)
 		sym[j] = 0;
 
 	return yyparse();	
@@ -77,4 +82,5 @@ int main(void)
 
 void yyerror()
 {
+	
 }

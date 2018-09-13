@@ -10,7 +10,18 @@
 <li><b>============</b></li>
 
   <li>Program 1 - Closure of Epsilon-NFA</li>
-  <li>Program 2-  Conversion of Epsilon-NFA to NFA</li>
+  <li>Program 2 -  Conversion of Epsilon-NFA to NFA</li>
   <li>Program 3 - Conversion of NFA to DFA</li>
   <li>Program 4 - Conversion of DFA to Minimised DFA using Myhill-Nerode Theorem</li>
+</ul>
+<ul>
+<li><b>Lab Cycle 2</b></li>
+<li><b>============</b></li>
+
+  <li>Program 1   - Lexical Analyzer for a given language</li>
+  <li>Program 2   -  Lexical Analyzer Using Lex Tool</li>
+  <li>Program 3-A - Arithmetic Expression Validator using YACC</li>
+  <li>Program 3-B - Identifier Validator using YACC</li>
+  <li>Program 3-C - Calculator using YACC</li>
+  <li>Program 3-D - BNF Demo </li>
 </ul>
