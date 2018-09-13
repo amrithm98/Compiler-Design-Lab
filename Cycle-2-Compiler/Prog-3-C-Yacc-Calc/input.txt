@@ -1,0 +1,14 @@
+a=5;
+b=10;
+c=a+b;
+d=a-b;
+e=a/b;
+f=a*b;
+print a;
+print b;
+print c;
+print d;
+print e;
+print f;
+print 1+2+3*4;
+end;

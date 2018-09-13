@@ -1,6 +1,7 @@
 %{
 #include "prog.h"
 %}
+
 letter [a-zA-Z]
 digitt [0-9]
 id {letter}*|({letter}{digitt})+

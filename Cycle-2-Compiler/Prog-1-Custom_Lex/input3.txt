@@ -1,0 +1,1 @@
+b:=5*a;a:=a+1;endwhile;write a;
