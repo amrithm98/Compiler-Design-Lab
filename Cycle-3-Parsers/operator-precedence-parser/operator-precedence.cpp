@@ -14,6 +14,8 @@ bool operatorPrecedenceParse(string s)
 
     int i = 0;
 
+    cout << "\n Stack \t \t \t Input \n =====================================\n";
+
     while(i < s.size())
     {
         char b = st.top();
@@ -22,7 +24,6 @@ bool operatorPrecedenceParse(string s)
         int prec_b = opToId[b];
         int prec_a = opToId[a];
 
-        cout << "\nState : " << a << " " << b << " " << endl;
 
         if(b == '$' && a == '$')
         {
@@ -30,8 +31,9 @@ bool operatorPrecedenceParse(string s)
         }
 
         st.print();
+        cout << "\t \t \t"  << s.substr(i) << endl;
 
-        if(precedenceTable[prec_a][prec_b] >= 1)
+        if(precedenceTable[prec_a][prec_b] == 1)
         {
             st.push(a);
             i++;
@@ -41,7 +43,8 @@ bool operatorPrecedenceParse(string s)
             if(!st.empty())
             {
                 char c = st.top();
-                while(c != '$' && !st.empty() && precedenceTable[opToId[a]][opToId[c]] < 1)
+
+                while(c != '$' && !st.empty() && (precedenceTable[opToId[a]][opToId[c]] == 0 || precedenceTable[opToId[a]][opToId[c]] == 2))
                 {
                     st.pop();
                     if(!st.empty())
@@ -51,6 +54,13 @@ bool operatorPrecedenceParse(string s)
         }
     }
 
+    return false;
+}
+
+bool isOp(char c)
+{
+    if(c == '+' || c == '*')
+        return true;
     return false;
 }
 
@@ -91,7 +101,14 @@ int main()
     string s;
     cin >> s;
 
-    cout << operatorPrecedenceParse(s);
+    if(operatorPrecedenceParse(s))
+    {
+        cout << "\nSuccessfully Parsed Expression !" << endl;
+    }
+    else
+    {
+        cout << "\nThere was an error in the expression" << endl;
+    }
 
     return 0;
 }

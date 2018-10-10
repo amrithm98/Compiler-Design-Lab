@@ -44,6 +44,5 @@ class Stack
         {
             for(int i = 0; i < st.size(); i++)
                 cout << st[i] << " ";
-            cout << endl;
         }
 };
