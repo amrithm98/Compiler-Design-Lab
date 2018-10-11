@@ -69,21 +69,26 @@ void findFirst(char c)
 
 void findFollow(char c)
 {
-    // if(visitedFollow.find(c) != visitedFollow.end())
-    //     return;
-    
-    cout << "\nFOllow of : " << c << endl;
+    cout << "\nFollow of : " << c << endl;
+    //Iterate through the right hand side of all productions Using 2 loops
     for(auto sets : productions)
-    {
+    {   
         for(auto it2 : sets.second)
         {
+            //it2 represents one string which appears on the RHS of a grammar
+            //Check if this production has been visited
+
             if(visitedProductions.find(it2) == visitedProductions.end())
             {
                 visitedProductions.insert(it2);
+                //visit the production and see where the symbol 'c' appears
+
                 for(int i = 0; i < it2.size(); i++)
                 {
+                    //Found that symbol in the RHS
                     if(it2[i] == c)
                     {
+                        //If it is the last symbol , find the follow of the LHS
                         if(i == it2.size()-1)
                         {
                             printf("\nFollow of %c is FOLLOW of %c",c,sets.first);
@@ -95,16 +100,18 @@ void findFollow(char c)
                         }
                         else if(i < it2.size()-1 && terminals.find(it2[i+1]) != terminals.end())
                         {
+                            //If it is followed by a symbol, insert that symbol into follow
                             printf("\nFollow of %c Contains %c",c,it2[i+1]);
                             if(it2[i+1] != '#')
                                 follow[c].insert(it2[i+1]);
                         }
                         else
-                        {                            
+                        {                      
+                            //Follow of 'c' is the First of next non terminal it+1      
                             printf("\nFollow of %c is FIRST of %c",c,it2[i+1]);
                             follow[c].insert(first[it2[i+1]].begin(), first[it2[i+1]].end());
 
-                            //If First of It Contains Epsilon, find First of the next symbol
+                            //If First of i+1 Contains Epsilon, find First of the next symbol
                             if(first[it2[i+1]].find('#') != first[it2[i+1]].end())
                             {
                                 if(i < it2.size() - 2)
@@ -125,7 +132,6 @@ void findFollow(char c)
         }
     }
 
-    // visitedFollow.insert(c);
 }
 
 int main()
@@ -133,9 +139,6 @@ int main()
     ifstream infile("productions.txt");
 
     string temp;
-
-    // char start;
-    // infile >> start;
 
     follow['E'].insert('$');
 
