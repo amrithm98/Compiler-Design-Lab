@@ -141,9 +141,9 @@ int main()
     setup();
 
     if(operator_pp(s))
-        cout << "\nSuccessfully Parsed";
+        cout << "\nSuccessfully Parsed\n";
     else    
-        cout << "\nError in Expression";
+        cout << "\nError in Expression\n";
 
     return 0;
 }
