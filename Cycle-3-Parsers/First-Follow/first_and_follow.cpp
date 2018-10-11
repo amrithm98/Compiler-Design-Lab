@@ -3,8 +3,8 @@ using namespace std;
 
 set<char> terminals, nonTerminals;
 map<char,set<string>> productions;
-map<char,set<string>> first;
-map<char,set<string>> follow;
+map<char,set<char>> first;
+map<char,set<char>> follow;
 
 void showDetails()
 {
@@ -23,7 +23,38 @@ void showDetails()
     for(auto it : nonTerminals)
         cout << it << " ";
 
-    cout << "\n";
+    cout << "\nFIRST : \n";
+    for(auto it : first)
+    {
+        cout << it.first << " : ";
+        for(auto it1 : it.second)
+            cout << it1 << " ";
+
+        cout << endl;
+    }
+
+    cout << "\n\n";
+}
+
+void findFirst(char c)
+{
+    for(auto it : productions[c])
+    {
+        if(terminals.find(it[0]) == terminals.end())
+        {
+            findFirst(it[0]);
+            first[c] = first[it[0]];
+        }
+        else
+        {
+            first[c].insert(it[0]);
+        }
+    }
+}
+
+void findFollow()
+{
+    
 }
 
 int main()
@@ -52,6 +83,12 @@ int main()
             else
                 terminals.insert(temp[i]);
         }
+    }
+
+
+    for(auto it : productions)
+    {
+        findFirst(it.first);
     }
 
     showDetails();
