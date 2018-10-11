@@ -58,7 +58,7 @@ void findFirst(char c)
         if(terminals.find(it[0]) == terminals.end())
         {
             findFirst(it[0]);
-            first[c] = first[it[0]];
+            first[c].insert(first[it[0]].begin(), first[it[0]].end());
         }
         else
         {
