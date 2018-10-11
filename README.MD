@@ -23,5 +23,14 @@
   <li>Program 3-A - Arithmetic Expression Validator using YACC</li>
   <li>Program 3-B - Identifier Validator using YACC</li>
   <li>Program 3-C - Calculator using YACC</li>
-  <li>Program 3-D - BNF Demo </li>
+  <li>Program 3-D - BNF Demo(Removed From Cycle Due to Lack of Clarity in the question) </li>
+</ul>
+<li><b>Lab Cycle 3</b></li>
+<li><b>============</b></li>
+
+  <li>Program 1   - Operator Precedence Parser For Expression Grammar</li>
+  <li>Program 2   - Recursive Descent Parser For Expression Grammar(Without Left Recursion)</li>
+  <li>Program 3   - First & Follow of Expression Grammar(Without Left Recursion)</li>
+  <li>Program 4   - Shift Reduce Parser</li>
+
 </ul>
