@@ -112,18 +112,34 @@ void findFollow(char c)
                             follow[c].insert(first[it2[i+1]].begin(), first[it2[i+1]].end());
 
                             //If First of i+1 Contains Epsilon, find First of the next symbol
-                            if(first[it2[i+1]].find('#') != first[it2[i+1]].end())
+                            //Do this iteratively because F->ABCDE, A contains #, take B, B contains # take C and so on
+                            for(int k = i+1; k < it2.size(); k++)
                             {
-                                if(i < it2.size() - 2)
+                                if(first[it2[k]].find('#') != first[it2[k]].end())
                                 {
-                                    follow[c].insert(first[it2[i+2]].begin(), first[it2[i+2]].end());
-                                }
-                                else //If i+2th symbol didn't exist, find follow of LHS
-                                {
-                                    findFollow(it2[i+1]);
-                                    follow[c].insert(follow[it2[i+1]].begin(), follow[it2[i+1]].end());
+                                    if(k < it2.size() - 1)
+                                    {
+                                        follow[c].insert(first[it2[k+1]].begin(), first[it2[k+1]].end());
+                                    }
+                                    else //If i+2th symbol didn't exist, find follow of LHS
+                                    {
+                                        findFollow(sets.first);
+                                        follow[c].insert(follow[sets.first].begin(), follow[sets.first].end());
+                                    }
                                 }
                             }
+                            // if(first[it2[i+1]].find('#') != first[it2[i+1]].end())
+                            // {
+                            //     if(i < it2.size() - 2)
+                            //     {
+                            //         follow[c].insert(first[it2[i+2]].begin(), first[it2[i+2]].end());
+                            //     }
+                            //     else //If i+2th symbol didn't exist, find follow of LHS
+                            //     {
+                            //         findFollow(it2[i+1]);
+                            //         follow[c].insert(follow[it2[i+1]].begin(), follow[it2[i+1]].end());
+                            //     }
+                            // }
                         }
                     }
                 }
