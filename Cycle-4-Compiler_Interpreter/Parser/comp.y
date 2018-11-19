@@ -50,6 +50,8 @@
 %token MINUS
 %token MULT
 %token DIV
+%token SEMICOLON
+%token GT
 
 %token NUM IDENTI
 %type<num> expression NUM
@@ -75,24 +77,27 @@ id_seq:id_seq IDENTI COMMA          { printf("\nIdentifier : %s", $2);install($2
 |
 ;
 
-command_sequence:command_sequence command COMMA
+command_sequence:command_sequence command SEMICOLON
 |
 ;
 
-command : IDENTI  EQUAL expression       { printf("\nIdentifier : %s", $1); put_symbol($1, $3); }
-| IF expression THEN command_sequence ELSE command_sequence EIF
+command : IDENTI EQUAL expression       { printf("\nIdentifier = Expr : %s %d", $1, $3); put_symbol($1, $3); }
+| IF expression THEN command_sequence ELSE command_sequence EIF {printf("\nIf Expression");}
 | WHILE expression DO command_sequence EWHILE
 | READ IDENTI  { printf("\nIdentifier : %s", $2); install($2); }
 | WRITE expression
 |
 ;
 
-expression : NUM { $$ = $1; }
-| IDENTI    { printf("\nIdentifier : %s", $1); install ($1); }
-| '(' expression ')'
-| expression PLUS expression | expression MULT expression
-| expression MINUS expression | expression DIV expression
-| expression LS expression
+expression : NUM      { $$ = $1; }
+| IDENTI              {$$ = (get_symbol($1)!= NULL)? get_symbol($1)->data:0;}
+| '(' expression ')'  {$$ = $2;}
+| expression PLUS expression  {$$ = $1+$3;}
+| expression MULT expression  {$$ = $1*$3;}
+| expression MINUS expression {$$ = $1-$3;}
+| expression DIV expression   {$$ = $1/$3;}
+| expression LS expression    {$$ = $1<$3;}
+| expression GT expression    {$$ = $1>$3;}
 ;
 
 %%

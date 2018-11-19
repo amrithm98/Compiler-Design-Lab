@@ -69,8 +69,10 @@ extern int yydebug;
     MINUS = 276,
     MULT = 277,
     DIV = 278,
-    NUM = 279,
-    IDENTI = 280
+    SEMICOLON = 279,
+    GT = 280,
+    NUM = 281,
+    IDENTI = 282
   };
 #endif
 /* Tokens.  */
@@ -95,8 +97,10 @@ extern int yydebug;
 #define MINUS 276
 #define MULT 277
 #define DIV 278
-#define NUM 279
-#define IDENTI 280
+#define SEMICOLON 279
+#define GT 280
+#define NUM 281
+#define IDENTI 282
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
@@ -108,7 +112,7 @@ union YYSTYPE
   char *name;
   int num; 
 
-#line 112 "y.tab.h" /* yacc.c:1912  */
+#line 116 "y.tab.h" /* yacc.c:1912  */
 };
 
 typedef union YYSTYPE YYSTYPE;

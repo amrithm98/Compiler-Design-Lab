@@ -19,8 +19,8 @@
 "integer"	return INT;
 "begin"		return BEG;
 "read"		return READ;
-"if"		return IF;
-"then"		return THEN;
+"if"		{printf("\nIF Condition");return IF;}
+"then"		{printf("\nThen Condition");return THEN;}
 "else"		return ELSE;
 "endif"		return EIF;
 "while"		return WHILE;
@@ -28,16 +28,18 @@
 "endwhile"	return EWHILE;
 "write"		return WRITE;
 "end"		return END;
-[a-zA-Z_][_a-zA-Z0-9]*	{ printf("\nIdentifier : %s",yytext); yylval.name = strdup(yytext); return IDENTI; }
-[0-9]+					{ yylval.num = atoi(yytext); return NUM; }
-\< 			return LS;
-\. 			return DOT;
-\, 			return COMMA;
-\:= 		return EQUAL;
-[+] 		return PLUS;
-[-] 		return MINUS;
-[*] 		return MULT;
-[/] 		return DIV;
+[a-zA-Z_][_a-zA-Z0-9]*	{ printf("\nIdentifier - Lex: %s",yytext); yylval.name = strdup(yytext); return IDENTI; }
+[0-9]+					{ printf("\nNumber : %d", atoi(yytext));yylval.num = atoi(yytext); return NUM; }
+"<" 		return LS;
+">"			return GT;
+"." 		return DOT;
+","			return COMMA;
+":=" 		return EQUAL;
+"+" 		return PLUS;
+"-" 		return MINUS;
+"*" 		return MULT;
+"/" 		return DIV;
+";"			return SEMICOLON;
 
 %%
 /*** C Code section ***/
