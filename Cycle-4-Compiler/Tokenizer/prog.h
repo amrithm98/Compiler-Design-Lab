@@ -1,0 +1,17 @@
+#define IDENTIFIER	1
+#define ASSIGN_OP 	2
+#define KEYWORD 	3
+#define LT		4
+#define GT		5
+#define GTE		6
+#define LTE		7
+#define DIGIT		8
+#define	SEMICOLON	9
+#define ADD_OP		10
+#define SUB_OP		11
+#define MUL_OP		12
+#define DIV_OP 		13
+#define EQU_OP		14
+#define LITERAL		15
+#define DOT         16
+#define ERROR       99
