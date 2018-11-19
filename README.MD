@@ -1,4 +1,4 @@
-# System-Software-Lab
+# Compiler-Design-Lab
 <br>Amrith M
 <br>S1710
 <br>TVE15CS010
@@ -37,4 +37,12 @@
   <li>Program 2   - Recursive Descent Parser For Expression Grammar(Without Left Recursion)</li>
   <li>Program 3   - First & Follow of Expression Grammar(Without Left Recursion)</li>
   <li>Program 4   - Shift Reduce Parser</li>
+</ul>
+
+<ul>
+<li><b>Lab Cycle 4</b></li>
+<li><b>============</b></li>
+
+  <li>Program 1   - Tokenize and Parse the given program with the given grammar</li>
+  <li>Program 2   - Symbol Table Yet to Be Made</li>
 </ul>
