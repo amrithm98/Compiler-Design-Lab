@@ -332,6 +332,9 @@ void yyfree (void *  );
 
 /* Begin user sect3 */
 
+#define yywrap(n) 1
+#define YY_SKIP_YYWRAP
+
 typedef unsigned char YY_CHAR;
 
 FILE *yyin = (FILE *) 0, *yyout = (FILE *) 0;
@@ -460,8 +463,9 @@ int yy_flex_debug = 0;
 char *yytext;
 #line 1 "calc_eval.l"
 #line 2 "calc_eval.l"
+	#include <stdio.h>
 	#include "y.tab.h"
-#line 465 "lex.yy.c"
+#line 469 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -643,9 +647,9 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
     
-#line 4 "calc_eval.l"
+#line 8 "calc_eval.l"
 
-#line 649 "lex.yy.c"
+#line 653 "lex.yy.c"
 
 	if ( !(yy_init) )
 		{
@@ -730,51 +734,51 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 5 "calc_eval.l"
+#line 9 "calc_eval.l"
 {return print;}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 6 "calc_eval.l"
+#line 10 "calc_eval.l"
 {return end;}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 7 "calc_eval.l"
+#line 11 "calc_eval.l"
 {yylval.id = yytext[0]; return identifier;}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 8 "calc_eval.l"
+#line 12 "calc_eval.l"
 {yylval.n = atoi(yytext); return num;}
 	YY_BREAK
 case 5:
 /* rule 5 can match eol */
 YY_RULE_SETUP
-#line 9 "calc_eval.l"
+#line 13 "calc_eval.l"
 ;
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 10 "calc_eval.l"
+#line 14 "calc_eval.l"
 {return yytext[0];}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 11 "calc_eval.l"
+#line 15 "calc_eval.l"
 {return yytext[0];}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 12 "calc_eval.l"
+#line 16 "calc_eval.l"
 {ECHO; yyerror();}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 13 "calc_eval.l"
+#line 17 "calc_eval.l"
 ECHO;
 	YY_BREAK
-#line 778 "lex.yy.c"
+#line 782 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1771,11 +1775,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 13 "calc_eval.l"
+#line 17 "calc_eval.l"
 
 
-int yywrap(void)
-{
-	return 1;
-}
 

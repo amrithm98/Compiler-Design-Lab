@@ -1,6 +1,10 @@
 %{
+	#include <stdio.h>
 	#include "y.tab.h"
 %}
+
+%option noyywrap
+
 %%
 "print"	    {return print;}
 "exit"	    {return end;}
@@ -11,7 +15,3 @@
 "*"	        {return yytext[0];}
 .	        {ECHO; yyerror();}
 %%
-int yywrap(void)
-{
-	return 1;
-}
