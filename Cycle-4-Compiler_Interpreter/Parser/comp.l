@@ -2,9 +2,11 @@
 
 %{
 /* C code to be copied verbatim */
-#include <stdio.h>
-#include <stdlib.h>
-#include "y.tab.h"
+	#include <stdio.h>
+	#include <stdlib.h>
+	#include "y.tab.h"
+	#include <iostream>
+	using namespace std;
 %}
 
 /* This tells flex to read only one input file */
@@ -26,8 +28,8 @@
 "endwhile"	return EWHILE;
 "write"		return WRITE;
 "end"		return END;
-[a-zA-Z_][_a-zA-Z0-9]+	return IDENTI;
-[0-9]+					return NUM;
+[a-zA-Z_][_a-zA-Z0-9]*	{ printf("\nIdentifier : %s",yytext); yylval.name = strdup(yytext); return IDENTI; }
+[0-9]+					{ yylval.num = atoi(yytext); return NUM; }
 \< 			return LS;
 \. 			return DOT;
 \, 			return COMMA;

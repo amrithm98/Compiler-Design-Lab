@@ -61,16 +61,16 @@ extern int yydebug;
     EWHILE = 268,
     WRITE = 269,
     END = 270,
-    IDENTI = 271,
-    NUM = 272,
-    LS = 273,
-    DOT = 274,
-    COMMA = 275,
-    EQUAL = 276,
-    PLUS = 277,
-    MINUS = 278,
-    MULT = 279,
-    DIV = 280
+    LS = 271,
+    DOT = 272,
+    COMMA = 273,
+    EQUAL = 274,
+    PLUS = 275,
+    MINUS = 276,
+    MULT = 277,
+    DIV = 278,
+    NUM = 279,
+    IDENTI = 280
   };
 #endif
 /* Tokens.  */
@@ -87,25 +87,25 @@ extern int yydebug;
 #define EWHILE 268
 #define WRITE 269
 #define END 270
-#define IDENTI 271
-#define NUM 272
-#define LS 273
-#define DOT 274
-#define COMMA 275
-#define EQUAL 276
-#define PLUS 277
-#define MINUS 278
-#define MULT 279
-#define DIV 280
+#define LS 271
+#define DOT 272
+#define COMMA 273
+#define EQUAL 274
+#define PLUS 275
+#define MINUS 276
+#define MULT 277
+#define DIV 278
+#define NUM 279
+#define IDENTI 280
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 
 union YYSTYPE
 {
-#line 34 "comp.y" /* yacc.c:1912  */
+#line 27 "comp.y" /* yacc.c:1912  */
 
-  char charvalue;
+  char *name;
   int num; 
 
 #line 112 "y.tab.h" /* yacc.c:1912  */

@@ -1,5 +1,5 @@
-!#/bin/bash
+#!/bin/bash
 lex comp.l
 yacc -d comp.y
-gcc lex.yy.c y.tab.c
+g++ lex.yy.c y.tab.c
 ./a.out < inp.i

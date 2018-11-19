@@ -375,8 +375,8 @@ struct yy_trans_info
 static yyconst flex_int16_t yy_accept[68] =
     {   0,
         0,    0,   25,   24,   22,   20,   18,   21,   17,   23,
-       15,   24,   16,   24,   24,   24,   24,   24,   24,   24,
-       24,   24,   15,   19,   14,   14,   10,   14,   14,    5,
+       15,   24,   16,   14,   14,   14,   14,   14,   14,   14,
+       14,   14,   15,   19,   14,   14,   10,   14,   14,    5,
        14,   14,   14,   14,   14,   14,   14,   14,   13,   14,
        14,   14,   14,   14,   14,   14,    7,   14,   14,   14,
         1,    4,    6,   14,   14,    3,    8,   14,   14,    9,
@@ -494,11 +494,13 @@ char *yytext;
 /*** Definition section ***/
 #line 4 "comp.l"
 /* C code to be copied verbatim */
-#include <stdio.h>
-#include <stdlib.h>
-#include "y.tab.h"
+	#include <stdio.h>
+	#include <stdlib.h>
+	#include "y.tab.h"
+	#include <iostream>
+	using namespace std;
 /* This tells flex to read only one input file */
-#line 502 "lex.yy.c"
+#line 504 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -680,12 +682,12 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
     
-#line 12 "comp.l"
+#line 14 "comp.l"
 
 	/*** Rules section ***/
 
 	/* [0-9]+ matches a string of one or more digits */
-#line 689 "lex.yy.c"
+#line 691 "lex.yy.c"
 
 	if ( !(yy_init) )
 		{
@@ -770,125 +772,125 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 16 "comp.l"
+#line 18 "comp.l"
 return PROG;
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 17 "comp.l"
+#line 19 "comp.l"
 return INT;
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 18 "comp.l"
+#line 20 "comp.l"
 return BEG;
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 19 "comp.l"
+#line 21 "comp.l"
 return READ;
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 20 "comp.l"
+#line 22 "comp.l"
 return IF;
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 21 "comp.l"
+#line 23 "comp.l"
 return THEN;
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 22 "comp.l"
+#line 24 "comp.l"
 return ELSE;
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 23 "comp.l"
+#line 25 "comp.l"
 return EIF;
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 24 "comp.l"
+#line 26 "comp.l"
 return WHILE;
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 25 "comp.l"
+#line 27 "comp.l"
 return DO;
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 26 "comp.l"
+#line 28 "comp.l"
 return EWHILE;
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 27 "comp.l"
+#line 29 "comp.l"
 return WRITE;
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 28 "comp.l"
+#line 30 "comp.l"
 return END;
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 29 "comp.l"
-return IDENTI;
+#line 31 "comp.l"
+{ printf("\nIdentifier : %s",yytext); yylval.name = strdup(yytext); return IDENTI; }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 30 "comp.l"
-return NUM;
+#line 32 "comp.l"
+{ yylval.num = atoi(yytext); return NUM; }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 31 "comp.l"
+#line 33 "comp.l"
 return LS;
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 32 "comp.l"
+#line 34 "comp.l"
 return DOT;
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 33 "comp.l"
+#line 35 "comp.l"
 return COMMA;
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 34 "comp.l"
+#line 36 "comp.l"
 return EQUAL;
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 35 "comp.l"
+#line 37 "comp.l"
 return PLUS;
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 36 "comp.l"
+#line 38 "comp.l"
 return MINUS;
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 37 "comp.l"
+#line 39 "comp.l"
 return MULT;
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 38 "comp.l"
+#line 40 "comp.l"
 return DIV;
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 40 "comp.l"
+#line 42 "comp.l"
 ECHO;
 	YY_BREAK
-#line 892 "lex.yy.c"
+#line 894 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1885,7 +1887,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 40 "comp.l"
+#line 42 "comp.l"
 
 
 /*** C Code section ***/
