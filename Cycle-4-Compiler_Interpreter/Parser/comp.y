@@ -87,27 +87,42 @@
 %%
 
 
-Pro: PROG declarations BEG command_sequence END
+Pro:    PROG declarations               {pos += sprintf( machine_code + pos , "res\t\t%d\n" , data_offset/4);} 
+        BEG command_sequence END        {pos += sprintf( machine_code + pos , "halt\t\t0\n");}
 
 declarations: INT id_seq IDENTI DOT { printf("\nIdentifier : %s", $3);install($3); }
-|
-;
+        |
+        ;
 
 id_seq:id_seq IDENTI COMMA          { printf("\nIdentifier : %s", $2);install($2); }
-|
-;
+        |
+        ;
 
 command_sequence:command_sequence command SEMICOLON
-|
-;
+        |
+        ;
 
-command : IDENTI EQUAL expression       { printf("\nIdentifier = Expr : %s %d", $1, $3); put_symbol($1, $3); }
-| IF expression THEN command_sequence ELSE command_sequence EIF {printf("\nIf Expression");}
-| WHILE expression DO command_sequence EWHILE
-| READ IDENTI  { printf("\nIdentifier : %s", $2); install($2); }
-| WRITE expression
-|
-;
+command : IDENTI EQUAL expression                           {
+                                                                context_check($1);
+                                                                pos += sprintf(machine_code + pos , "store\t\t%d\n" , $3);
+                                                                // printf("\nIdentifier = Expr : %s %d", $1, $3); 
+                                                                put_symbol($1, $3); 
+                                                            }   
+        | IF expression THEN                                {
+                                                                pos += sprintf(machine_code+pos , "jmp_false\tL1\n");
+                                                            }
+
+          command_sequence                                  {
+										                        pos += sprintf(machine_code+pos , "goto\t\tL2\n");
+                                                            }
+          ELSE command_sequence EIF                         
+
+        | WHILE expression DO command_sequence EWHILE                       
+
+        | READ IDENTI                                       { printf("\nIdentifier : %s", $2); install($2); }
+        | WRITE expression
+        |
+        ;
 
 expression : NUM      { $$ = $1; }
 | IDENTI              {$$ = (get_symbol($1)!= NULL)? get_symbol($1)->data:0;}
