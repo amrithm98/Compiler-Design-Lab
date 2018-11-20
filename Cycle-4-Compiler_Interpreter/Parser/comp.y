@@ -87,14 +87,25 @@
 %%
 
 
-Pro:    PROG declarations               {pos += sprintf( machine_code + pos , "res\t\t%d\n" , data_offset/4);} 
-        BEG command_sequence END        {pos += sprintf( machine_code + pos , "halt\t\t0\n");}
+Pro:    PROG declarations                                   { 
+                                                                pos += sprintf( machine_code + pos , "res\t\t%d\n" , data_offset/4);
+                                                            }
 
-declarations: INT id_seq IDENTI DOT { printf("\nIdentifier : %s", $3);install($3); }
+        BEG command_sequence END                            {
+                                                                pos += sprintf( machine_code + pos , "halt\t\t0\n");
+                                                            }
+
+declarations: INT id_seq IDENTI DOT                         { 
+                                                                printf("\nIdentifier : %s", $3);
+                                                                install($3); 
+                                                            }
         |
         ;
 
-id_seq:id_seq IDENTI COMMA          { printf("\nIdentifier : %s", $2);install($2); }
+id_seq:id_seq IDENTI COMMA                                  { 
+                                                                printf("\nIdentifier : %s", $2);
+                                                                install($2); 
+                                                            }
         |
         ;
 
@@ -107,32 +118,79 @@ command : IDENTI EQUAL expression                           {
                                                                 pos += sprintf(machine_code + pos , "store\t\t%d\n" , $3);
                                                                 // printf("\nIdentifier = Expr : %s %d", $1, $3); 
                                                                 put_symbol($1, $3); 
-                                                            }   
+                                                            }  
+
         | IF expression THEN                                {
-                                                                pos += sprintf(machine_code+pos , "jmp_false\tL1\n");
+                                                                pos += sprintf(machine_code + pos , "jmp_false\tL1\n");
                                                             }
 
           command_sequence                                  {
-										                        pos += sprintf(machine_code+pos , "goto\t\tL2\n");
+										                        pos += sprintf(machine_code + pos , "goto\t\tL2\n");
                                                             }
           ELSE command_sequence EIF                         
 
-        | WHILE expression DO command_sequence EWHILE                       
+        | WHILE expression DO                               {
+                    										    pos += sprintf(machine_code+pos , "jmp_false\tL2\n");
+                                                            }
 
-        | READ IDENTI                                       { printf("\nIdentifier : %s", $2); install($2); }
-        | WRITE expression
+          command_sequence                                  {
+                                                                pos += sprintf(machine_code+pos , "goto\t\tL1\n");
+                                                            }
+          EWHILE                
+
+        | READ IDENTI                                       {   
+                                                                install($2); 
+                                                                context_check(lastID);
+										                        pos += sprintf(machine_code + pos , "read\t\t%d\n" , $2);
+                                                            }
+
+        | WRITE expression                                  {
+                                                                pos += sprintf(machine_code+pos , "write\t\t0\n");
+                                                            }
         |
         ;
 
-expression : NUM      { $$ = $1; }
-| IDENTI              {$$ = (get_symbol($1)!= NULL)? get_symbol($1)->data:0;}
-| '(' expression ')'  {$$ = $2;}
-| expression PLUS expression  {$$ = $1+$3;}
-| expression MULT expression  {$$ = $1*$3;}
-| expression MINUS expression {$$ = $1-$3;}
-| expression DIV expression   {$$ = $1/$3;}
-| expression LS expression    {$$ = $1<$3;}
-| expression GT expression    {$$ = $1>$3;}
+expression : NUM                                            { 						
+                                                                pos += sprintf(machine_code+pos , "load_int\t%d\n" , $1);
+                                                                $$ = $1; 
+                                                            }
+
+| IDENTI                                                    {
+    						                                    pos += sprintf(machine_code+pos , "load_var\t%d\n" , $1);
+                                                                $$ = (get_symbol($1)!= NULL)? get_symbol($1)->data:0;
+                                                            }
+
+| '(' expression ')'                                        {   $$ = $2;    }
+
+| expression PLUS expression                                {
+    									                        pos += sprintf(machine_code+pos , "add\t\t0\n");
+                                                                $$ = $1+$3;
+                                                            }
+
+| expression MULT expression                                {
+    									                        pos += sprintf(machine_code+pos , "mul\t\t0\n");
+                                                                $$ = $1*$3;
+                                                            }
+
+| expression MINUS expression                               {
+    									                        pos += sprintf(machine_code+pos , "sub\t\t0\n");
+                                                                $$ = $1-$3;
+                                                            }
+
+| expression DIV expression                                 {
+    									                        pos += sprintf(machine_code+pos , "div\t\t0\n");
+                                                                $$ = $1/$3;
+                                                            }
+
+| expression LS expression                                  {
+    									                        pos += sprintf(machine_code+pos , "lt\t\t0\n");
+                                                                $$ = $1<$3;
+                                                            }
+
+| expression GT expression                                  {
+    									                        pos += sprintf(machine_code+pos , "gt\t\t0\n");
+                                                                $$ = $1>$3;
+                                                            }
 ;
 
 %%
@@ -211,15 +269,22 @@ void displaySymTab()
     }
 }
 
+void write_machine_code()
+{
+	printf("\nStack Machine Code : \n\n%s\n" , machine_code);
+}
+
 int main()
 {
     sym_record = (struct sym_rec *)malloc(sizeof(struct sym_rec));
     sym_record->name = "end";
     sym_record->data = -1;
     sym_record->next = NULL;
-
+    
     yyparse();
     printf("\nThe program was successfully parsed and accepted\n");
     displaySymTab();
+    write_machine_code();
+
     return 0; 
 }
