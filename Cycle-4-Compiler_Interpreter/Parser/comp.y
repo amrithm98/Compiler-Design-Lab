@@ -6,6 +6,13 @@
     int yylex();
     void yyerror(const char *s);
 
+    void printError(int code);
+	void write_machine_code();
+	extern int line_no;
+    extern char lastID[100];
+
+	int data_offset = 0;
+
     struct sym_rec 
     {
         char *name;  //name of the symbol
@@ -14,6 +21,7 @@
         int data_offset;//will be used during code generation phase.
     };
 
+    extern struct sym_rec;
     struct sym_rec *sym_record;
 
     struct sym_rec * put_symbol(char *name, int data);
@@ -21,6 +29,17 @@
     void install(char *name);
     void context_check(char *name);
     void displaySymTab();
+
+    char machine_code[1000];
+	int  pos = 0;
+
+	struct stack_node{
+		int pos;
+		struct stack_node* next;
+	};
+	stack_node *stack_top = 0;
+	void push(int pos);
+	int  pop();
 %}
 
 %union 
@@ -62,6 +81,7 @@
 %left '+' '-'
 %left '*' '/' '%'
 %left '(' ')'
+%left '<' '>'
 
 %start Pro
 %%
@@ -142,6 +162,8 @@ void install(char *name)
         temp->name = name;
         temp->data = 0;
         temp->next = sym_record;
+        temp->data_offset = data_offset;
+        data_offset = data_offset + 4;
         sym_record = temp;
     }
 }
@@ -168,8 +190,8 @@ void displaySymTab()
     struct sym_rec *temp = sym_record;
     while(temp != NULL)
     {
-        if(temp->name != "end")
-          cout << "\nName : " << temp->name << " Value : " << temp->data << "\n";
+        if(strcmp(temp->name,"end") != 0)
+          cout << "\nName : " << temp->name << " Value : " << temp->data << " Offset: " << temp->data_offset << "\n";
         temp = temp->next;
     }
 }
