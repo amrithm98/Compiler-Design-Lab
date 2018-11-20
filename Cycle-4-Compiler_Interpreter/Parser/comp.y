@@ -27,7 +27,6 @@
     struct sym_rec * put_symbol(char *name, int data);
     struct sym_rec * get_symbol(char *name);
     void install(char *name);
-    void context_check(char *name);
     void displaySymTab();
 
     char machine_code[1000];
@@ -114,7 +113,7 @@ command_sequence:command_sequence command SEMICOLON
         ;
 
 command : IDENTI EQUAL expression                           {
-                                                                context_check($1);
+                                                                ////context_check($1);
                                                                 pos += sprintf(machine_code + pos , "store\t\t%d\n" , $3);
                                                                 // printf("\nIdentifier = Expr : %s %d", $1, $3); 
                                                                 put_symbol($1, $3); 
@@ -140,7 +139,7 @@ command : IDENTI EQUAL expression                           {
 
         | READ IDENTI                                       {   
                                                                 install($2); 
-                                                                context_check(lastID);
+                                                                //context_check(lastID);
 										                        pos += sprintf(machine_code + pos , "read\t\t%d\n" , $2);
                                                             }
 
