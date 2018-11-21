@@ -1,7 +1,7 @@
 prog
 	integer a,b.
 	begin
-		read n;
+		read a;
 		if a < 10 
 		then 
 			b := 1; 

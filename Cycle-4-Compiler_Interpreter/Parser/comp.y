@@ -31,6 +31,7 @@
 
     char machine_code[1000];
 	int  pos = 0;
+    int output_line_no = 1;
 
 	struct stack_node{
 		int pos;
@@ -89,10 +90,12 @@
 
 Pro:    PROG declarations                                   { 
                                                                 pos += sprintf( machine_code + pos , "res\t\t%d\n" , data_offset/4);
+                                                                output_line_no++;
                                                             }
 
         BEG command_sequence END                            {
                                                                 pos += sprintf( machine_code + pos , "halt\t\t0\n");
+                                                                output_line_no++;
                                                             }
 
 declarations: INT id_seq IDENTI DOT                         { 
@@ -118,23 +121,28 @@ command : IDENTI EQUAL expression                           {
                                                                 pos += sprintf(machine_code + pos , "store\t\t%d\n" , $3);
                                                                 // printf("\nIdentifier = Expr : %s %d", $1, $3); 
                                                                 put_symbol($1, $3); 
+                                                                output_line_no++;
                                                             }  
 
         | IF expression THEN                                {
-                                                                pos += sprintf(machine_code + pos , "jmp_false\tL1\n");
+                                                                pos += sprintf(machine_code + pos , "jmp_false\t\tL1\n");
+                                                                output_line_no++;
                                                             }
 
           command_sequence                                  {
 										                        pos += sprintf(machine_code + pos , "goto\t\tL2\n");
+                                                                output_line_no++;
                                                             }
           ELSE command_sequence EIF                         
 
         | WHILE expression DO                               {
-                    										    pos += sprintf(machine_code+pos , "jmp_false\tL2\n");
+                    										    pos += sprintf(machine_code+pos , "jmp_false\t\tL2\n");
+                                                                output_line_no++;
                                                             }
 
           command_sequence                                  {
                                                                 pos += sprintf(machine_code+pos , "goto\t\tL1\n");
+                                                                output_line_no++;
                                                             }
           EWHILE                
 
@@ -143,23 +151,27 @@ command : IDENTI EQUAL expression                           {
                                                                 int offset = get_symbol($2)->data_offset/4; 
                                                                 //context_check(lastID);
 										                        pos += sprintf(machine_code + pos , "read\t\t%d\n" ,offset);
+                                                                output_line_no++;
                                                             }
 
         | WRITE expression                                  {
                                                                 pos += sprintf(machine_code+pos , "write\t\t0\n");
+                                                                output_line_no++;
                                                             }
         |
         ;
 
 expression : NUM                                            { 						
-                                                                pos += sprintf(machine_code+pos , "load_int\t%d\n" , $1);
+                                                                pos += sprintf(machine_code+pos , "load_int\t\t%d\n" , $1);
                                                                 $$ = $1; 
+                                                                output_line_no++;
                                                             }
 
 | IDENTI                                                    {
                                                                 int offset = get_symbol($1)->data_offset/4;
-    						                                    pos += sprintf(machine_code+pos , "load_var\t%d\n" , offset);
+    						                                    pos += sprintf(machine_code+pos , "load_var\t\t%d\n" , offset);
                                                                 $$ = (get_symbol($1)!= NULL)? get_symbol($1)->data:0;
+                                                                output_line_no++;
                                                             }
 
 | '(' expression ')'                                        {   $$ = $2;    }
@@ -167,31 +179,37 @@ expression : NUM                                            {
 | expression PLUS expression                                {
     									                        pos += sprintf(machine_code+pos , "add\t\t0\n");
                                                                 $$ = $1+$3;
+                                                                output_line_no++;
                                                             }
 
 | expression MULT expression                                {
     									                        pos += sprintf(machine_code+pos , "mul\t\t0\n");
                                                                 $$ = $1*$3;
+                                                                output_line_no++;
                                                             }
 
 | expression MINUS expression                               {
     									                        pos += sprintf(machine_code+pos , "sub\t\t0\n");
                                                                 $$ = $1-$3;
+                                                                output_line_no++;
                                                             }
 
 | expression DIV expression                                 {
     									                        pos += sprintf(machine_code+pos , "div\t\t0\n");
                                                                 $$ = $1/$3;
+                                                                output_line_no++;
                                                             }
 
 | expression LS expression                                  {
     									                        pos += sprintf(machine_code+pos , "lt\t\t0\n");
                                                                 $$ = $1<$3;
+                                                                output_line_no++;
                                                             }
 
 | expression GT expression                                  {
     									                        pos += sprintf(machine_code+pos , "gt\t\t0\n");
                                                                 $$ = $1>$3;
+                                                                output_line_no++;
                                                             }
 ;
 
@@ -273,7 +291,15 @@ void displaySymTab()
 
 void write_machine_code()
 {
-	printf("\nStack Machine Code : \n\n%s\n" , machine_code);
+    int line_no = 0;
+	printf("\nStack Machine Code : \n\n" );
+	for(int i = 0 ; machine_code[i] != '\0' ; i++){
+		if(i == 0 || machine_code[i-1] == '\n'){
+			line_no++;
+			printf("%03d : ", line_no);
+		}
+		printf("%c",machine_code[i]);
+	}
 }
 
 int main()
