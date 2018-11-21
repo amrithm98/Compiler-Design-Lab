@@ -34,7 +34,7 @@
 <li><b>============</b></li>
 
   <li>Program 1   - Operator Precedence Parser For Expression Grammar</li>
-  <li>Program 2   - Recursive Descent Parser For Expression Grammar(Without Left Recursion)</li>
+  <li>Program 2   - Custom Recursive Descent Parser For Grammar(Without Left Recursion)</li>
   <li>Program 3   - First & Follow of Expression Grammar(Without Left Recursion)</li>
   <li>Program 4   - Shift Reduce Parser</li>
 </ul>
