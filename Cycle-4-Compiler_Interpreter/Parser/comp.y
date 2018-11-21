@@ -28,6 +28,7 @@
     struct sym_rec * get_symbol(char *name);
     void install(char *name);
     void displaySymTab();
+    void context_check(char *name);
 
     char machine_code[1000];
 	int  pos = 0;
@@ -120,7 +121,7 @@ command_sequence:command_sequence command SEMICOLON
         ;
 
 command : IDENTI EQUAL expression                           {
-                                                                ////context_check($1);
+                                                                context_check($1);
                                                                 int offset = get_symbol($1)->data_offset/4;
                                                                 pos += sprintf(machine_code + pos , "store\t\t%d\n" , offset);
                                                                 // printf("\nIdentifier = Expr : %s %d", $1, $3); 
@@ -169,9 +170,8 @@ command : IDENTI EQUAL expression                           {
           EWHILE                
 
         | READ IDENTI                                       {   
-                                                                install($2);
+                                                                context_check($2);
                                                                 int offset = get_symbol($2)->data_offset/4; 
-                                                                //context_check(lastID);
 										                        pos += sprintf(machine_code + pos , "read\t\t%d\n" ,offset);
                                                                 output_line_no++;
                                                             }
@@ -242,14 +242,35 @@ expression : NUM                                            {
 // 	int val;
 // };
 
-void yyerror(const char *str)
+void yyerror(const char*)
 {
 //   fprintf(stderr,"error: %s\n",str);
+    
+}
+
+void printError(int err)
+{
+    switch(err)
+    {
+        case 1 : 
+                break;
+        case 2:
+                break;
+        case 3:
+            printf("\nUndefined Variable");
+            break;
+    }
 }
 
 int yywrap()
 {
   return 1;
+}
+
+void context_check(char *name)
+{
+    if(get_symbol(name) == NULL)
+        printError(3);
 }
 
 struct sym_rec * get_symbol(char *name)
