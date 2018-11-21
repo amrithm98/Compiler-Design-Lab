@@ -107,7 +107,7 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 50 "comp.y" /* yacc.c:1912  */
+#line 48 "comp.y" /* yacc.c:1912  */
 
   char *name;
   int num; 

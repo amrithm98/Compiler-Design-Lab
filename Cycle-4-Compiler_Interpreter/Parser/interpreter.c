@@ -40,8 +40,8 @@ int pop();
 void push(int);
 int convert_opcode(char[]);
 
-int main(int argc , char** argv){
-
+int main(int argc , char** argv)
+{
     char opcode[10];
     int operand;
     int temp;
@@ -52,7 +52,6 @@ int main(int argc , char** argv){
 
     if(strcmp(argv[1] , "stdin") == 0)
         input = stdin;
-
     else
         input = fopen(argv[1] , "r");
 

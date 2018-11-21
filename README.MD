@@ -44,5 +44,7 @@
 <li><b>============</b></li>
 
   <li>Program 1   - Tokenize and Parse the given program with the given grammar</li>
-  <li>Program 2   - Symbol Table Yet to Be Made</li>
+  <li>Program 2   - Symbol Table </li>
+  <li>Program 3   - Generated Stack Machine Code </li>
+  <li>Program 4   - Interpreted Output </li>
 </ul>

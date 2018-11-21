@@ -8,8 +8,7 @@
 
     void printError(int code);
 	void write_machine_code();
-	extern int line_no;
-    extern char lastID[100];
+	extern int input_line_no;
 
 	int data_offset = 0;
 
@@ -21,7 +20,6 @@
         int data_offset;//will be used during code generation phase.
     };
 
-    extern struct sym_rec;
     struct sym_rec *sym_record;
 
     struct sym_rec * put_symbol(char *name, int data);
@@ -103,14 +101,14 @@ Pro:    PROG declarations                                   {
                                                             }
 
 declarations: INT id_seq IDENTI DOT                         { 
-                                                                printf("\nIdentifier : %s", $3);
+                                                                //printf("\nIdentifier : %s", $3);
                                                                 install($3); 
                                                             }
         |
         ;
 
 id_seq:id_seq IDENTI COMMA                                  { 
-                                                                printf("\nIdentifier : %s", $2);
+                                                                //printf("\nIdentifier : %s", $2);
                                                                 install($2); 
                                                             }
         |
@@ -250,16 +248,20 @@ void yyerror(const char*)
 
 void printError(int err)
 {
+    
     switch(err)
     {
         case 1 : 
+            printf("\nError: %d -> Compilation Error Found", input_line_no);
                 break;
         case 2:
+            printf("\nERROR: %d -> Redefinition Of Variable\n", input_line_no);
                 break;
         case 3:
-            printf("\nUndefined Variable");
+            printf("\nERROR: %d -> Undefined Variable\n", input_line_no);
             break;
     }
+    exit(0);
 }
 
 int yywrap()
@@ -302,6 +304,8 @@ void install(char *name)
         data_offset = data_offset + 4;
         sym_record = temp;
     }
+    else
+        printError(2);
 }
 
 struct sym_rec *put_symbol(char *name, int data)
