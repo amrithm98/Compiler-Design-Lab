@@ -121,7 +121,8 @@ command_sequence:command_sequence command SEMICOLON
 
 command : IDENTI EQUAL expression                           {
                                                                 ////context_check($1);
-                                                                pos += sprintf(machine_code + pos , "store\t\t%d\n" , $3);
+                                                                int offset = get_symbol($1)->data_offset/4;
+                                                                pos += sprintf(machine_code + pos , "store\t\t%d\n" , offset);
                                                                 // printf("\nIdentifier = Expr : %s %d", $1, $3); 
                                                                 put_symbol($1, $3); 
                                                                 output_line_no++;

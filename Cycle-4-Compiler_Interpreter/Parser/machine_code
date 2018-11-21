@@ -14,11 +14,11 @@ jmp_false		023
 load_int		5
 load_var		0
 mul		0
-store		0
+store		1
 load_var		0
 load_int		1
 add		0
-store		1
+store		0
 goto		010
 load_var		0
 write		0
