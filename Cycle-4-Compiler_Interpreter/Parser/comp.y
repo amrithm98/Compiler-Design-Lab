@@ -37,9 +37,12 @@
 		int pos;
 		struct stack_node* next;
 	};
+
 	stack_node *stack_top = 0;
 	void push(int pos);
 	int  pop();
+    void replace(char str[], int pos , int n);
+    void write_machine_code_to_file(const char*);
 %}
 
 %union 
@@ -125,24 +128,42 @@ command : IDENTI EQUAL expression                           {
                                                             }  
 
         | IF expression THEN                                {
-                                                                pos += sprintf(machine_code + pos , "jmp_false\t\tL1\n");
+                                                                //Push 000, replace it with next line of goto
+                                                                push(pos + 11);
+                                                                pos += sprintf(machine_code + pos , "jmp_false\t\t000\n");
                                                                 output_line_no++;
                                                             }
 
           command_sequence                                  {
-										                        pos += sprintf(machine_code + pos , "goto\t\tL2\n");
+                                                                //Line after goto appear here
+                                                                replace(machine_code, pop(), output_line_no + 1);
+                                                                //Goto 000, replace it once you get 000
+                                                                push(pos + 6);
+
+										                        pos += sprintf(machine_code + pos , "goto\t\t000\n");
                                                                 output_line_no++;
                                                             }
-          ELSE command_sequence EIF                         
 
-        | WHILE expression DO                               {
-                    										    pos += sprintf(machine_code+pos , "jmp_false\t\tL2\n");
+          ELSE command_sequence EIF                         {
+                                                                replace(machine_code, pop(), output_line_no);
+                                                            }
+
+        | WHILE                                             {
+                                                                push(output_line_no);
+                                                            }
+
+          expression DO                                     {
+                                                                push(pos + 11);
+                    										    pos += sprintf(machine_code+pos , "jmp_false\t\t000\n");
                                                                 output_line_no++;
                                                             }
 
           command_sequence                                  {
-                                                                pos += sprintf(machine_code+pos , "goto\t\tL1\n");
+                                                                int replace_pos = pop();
+                                                                pos += sprintf(machine_code+pos , "goto\t\t%03d\n", pop());
                                                                 output_line_no++;
+
+                                                                replace(machine_code, replace_pos, output_line_no);
                                                             }
           EWHILE                
 
@@ -302,6 +323,35 @@ void write_machine_code()
 	}
 }
 
+void write_machine_code_to_file(const char* filename){
+	FILE *output = fopen(filename , "w");
+	fprintf(output , "%s", machine_code);
+	fclose(output);
+}
+
+void push(int pos){
+	struct stack_node *node = (struct stack_node*)malloc(sizeof(struct stack_node));
+	node->pos = pos;
+	node->next = stack_top;
+	stack_top = node;
+}
+
+int pop(){
+	if(stack_top == 0)
+		return -1;
+	int pos = stack_top->pos;
+	struct stack_node* node = stack_top;
+	stack_top = stack_top->next;
+	free(node);
+	return pos;
+}
+
+void replace(char str[] , int pos , int n){
+	str[pos]   = n/100 + '0';
+	str[pos+1] = (n%100) / 10 + '0';
+	str[pos+2] = (n%10) + '0';
+}
+
 int main()
 {
     sym_record = (struct sym_rec *)malloc(sizeof(struct sym_rec));
@@ -313,6 +363,6 @@ int main()
     printf("\nThe program was successfully parsed and accepted\n");
     displaySymTab();
     write_machine_code();
-
+    write_machine_code_to_file("machine_code");
     return 0; 
 }

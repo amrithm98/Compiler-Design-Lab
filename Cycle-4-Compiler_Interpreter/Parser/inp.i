@@ -11,7 +11,7 @@ prog
 		while a < 10 
 		do 
 			b := 5*a; 
-			a:= a+1; 
+			a := a+1; 
 		endwhile;
 
 		write a;

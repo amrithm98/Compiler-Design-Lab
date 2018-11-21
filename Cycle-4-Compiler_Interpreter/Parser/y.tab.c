@@ -105,11 +105,14 @@
 		int pos;
 		struct stack_node* next;
 	};
+
 	stack_node *stack_top = 0;
 	void push(int pos);
 	int  pop();
+    void replace(char str[], int pos , int n);
+    void write_machine_code_to_file(const char*);
 
-#line 113 "y.tab.c" /* yacc.c:338  */
+#line 116 "y.tab.c" /* yacc.c:338  */
 # ifndef YY_NULLPTR
 #  if defined __cplusplus
 #   if 201103L <= __cplusplus
@@ -206,13 +209,13 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 46 "comp.y" /* yacc.c:353  */
+#line 49 "comp.y" /* yacc.c:353  */
 
   char *name;
   int num; 
   int offset;
 
-#line 216 "y.tab.c" /* yacc.c:353  */
+#line 219 "y.tab.c" /* yacc.c:353  */
 };
 
 typedef union YYSTYPE YYSTYPE;
@@ -460,16 +463,16 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  5
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   83
+#define YYLAST   78
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  39
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  12
+#define YYNNTS  13
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  28
+#define YYNRULES  29
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  56
+#define YYNSTATES  57
 
 /* YYTRANSLATE[YYX] -- Symbol number corresponding to YYX as returned
    by yylex, with out-of-bounds checking.  */
@@ -518,9 +521,9 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    91,    91,    91,   101,   105,   108,   112,   115,   116,
-     119,   127,   132,   127,   138,   143,   138,   149,   157,   161,
-     164,   170,   177,   179,   185,   191,   197,   203,   209
+       0,    94,    94,    94,   104,   108,   111,   115,   118,   119,
+     122,   130,   137,   130,   151,   155,   161,   151,   170,   178,
+     182,   185,   191,   198,   200,   206,   212,   218,   224,   230
 };
 #endif
 
@@ -535,7 +538,7 @@ static const char *const yytname[] =
   "GT", "NUM", "IDENTI", "'|'", "'&'", "'+'", "'-'", "'*'", "'/'", "'%'",
   "'('", "')'", "'<'", "'>'", "$accept", "Pro", "$@1", "declarations",
   "id_seq", "command_sequence", "command", "$@2", "$@3", "$@4", "$@5",
-  "expression", YY_NULLPTR
+  "$@6", "expression", YY_NULLPTR
 };
 #endif
 
@@ -551,12 +554,12 @@ static const yytype_uint16 yytoknum[] =
 };
 # endif
 
-#define YYPACT_NINF -23
+#define YYPACT_NINF -14
 
 #define yypact_value_is_default(Yystate) \
-  (!!((Yystate) == (-23)))
+  (!!((Yystate) == (-14)))
 
-#define YYTABLE_NINF -20
+#define YYTABLE_NINF -21
 
 #define yytable_value_is_error(Yytable_value) \
   0
@@ -565,12 +568,12 @@ static const yytype_uint16 yytoknum[] =
      STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-       3,     5,    22,   -23,   -23,   -23,     6,    31,    -3,   -23,
-     -23,   -23,    -4,    10,   -22,   -22,   -22,   -23,    19,    15,
-     -23,   -23,   -23,   -22,    38,    50,    58,   -22,   -23,    28,
-     -23,   -22,   -22,   -22,   -22,   -22,   -22,   -23,    58,   -23,
-     -23,    58,    58,    58,    58,    58,    58,   -23,    18,    18,
-      32,    30,   -23,   -23,    20,   -23
+       1,    20,     6,   -14,   -14,   -14,   -10,    21,    13,   -14,
+     -14,   -14,    -6,    15,   -13,   -14,   -13,   -14,     9,    16,
+     -14,   -14,   -14,   -13,    33,   -13,    53,   -13,   -14,    23,
+     -14,   -13,   -13,   -13,   -13,   -13,   -13,    45,    53,   -14,
+     -14,    53,    53,    53,    53,    53,    53,   -14,    -4,   -14,
+      38,    -4,   -14,    37,     5,   -14,   -14
 };
 
   /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -579,25 +582,25 @@ static const yytype_int8 yypact[] =
 static const yytype_uint8 yydefact[] =
 {
        0,     5,     0,     7,     2,     1,     0,     0,     0,     9,
-       4,     6,    19,     0,     0,     0,     0,     3,     0,     0,
-      17,    20,    21,     0,     0,     0,    18,     0,     8,     0,
-      11,     0,     0,     0,     0,     0,     0,    14,    10,    22,
-       9,    27,    23,    25,    24,    26,    28,     9,    12,    15,
-       0,     0,     9,    16,    19,    13
+       4,     6,    20,     0,     0,    14,     0,     3,     0,     0,
+      18,    21,    22,     0,     0,     0,    19,     0,     8,     0,
+      11,     0,     0,     0,     0,     0,     0,     0,    10,    23,
+       9,    28,    24,    26,    25,    27,    29,    15,    12,     9,
+       0,    16,     9,     0,    20,    17,    13
 };
 
   /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -23,   -23,   -23,   -23,   -23,   -12,   -23,   -23,   -23,   -23,
-     -23,   -15
+     -14,   -14,   -14,   -14,   -14,    11,   -14,   -14,   -14,   -14,
+     -14,   -14,     2
 };
 
   /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-      -1,     2,     7,     4,     6,    12,    19,    40,    50,    47,
-      51,    24
+      -1,     2,     7,     4,     6,    12,    19,    40,    50,    25,
+      49,    53,    24
 };
 
   /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -605,28 +608,26 @@ static const yytype_int8 yydefgoto[] =
      number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int8 yytable[] =
 {
-      25,    26,    13,    14,    21,    22,     1,    15,    29,     3,
-      16,    17,    38,    23,    10,    11,    41,    42,    43,    44,
-      45,    46,     5,    18,    13,    14,    13,    14,    48,    15,
-      55,    15,    16,     8,    16,    49,     9,    20,    27,    28,
-      54,    52,   -19,    53,    31,    18,    30,    18,    32,    33,
-      34,    35,     0,    36,    31,     0,     0,     0,    32,    33,
-      34,    35,    37,    36,    39,     0,    31,     0,     0,     0,
-      32,    33,    34,    35,    31,    36,     0,     0,    32,    33,
-      34,    35,     0,    36
+      13,    14,    13,    14,     1,    15,     5,    15,    16,    17,
+      16,    13,    14,    21,    22,    56,    15,     8,    26,    16,
+     -20,    18,    23,    18,     3,    29,     9,    37,    27,    38,
+      10,    11,    18,    41,    42,    43,    44,    45,    46,    31,
+      28,    30,    20,    32,    33,    34,    35,    52,    36,    31,
+      55,    48,     0,    32,    33,    34,    35,    47,    36,    39,
+      51,    31,     0,    54,     0,    32,    33,    34,    35,    31,
+      36,     0,     0,    32,    33,    34,    35,     0,    36
 };
 
 static const yytype_int8 yycheck[] =
 {
-      15,    16,     6,     7,    26,    27,     3,    11,    23,     4,
-      14,    15,    27,    35,    17,    18,    31,    32,    33,    34,
-      35,    36,     0,    27,     6,     7,     6,     7,    40,    11,
-      10,    11,    14,    27,    14,    47,     5,    27,    19,    24,
-      52,     9,    24,    13,    16,    27,     8,    27,    20,    21,
-      22,    23,    -1,    25,    16,    -1,    -1,    -1,    20,    21,
-      22,    23,    12,    25,    36,    -1,    16,    -1,    -1,    -1,
-      20,    21,    22,    23,    16,    25,    -1,    -1,    20,    21,
-      22,    23,    -1,    25
+       6,     7,     6,     7,     3,    11,     0,    11,    14,    15,
+      14,     6,     7,    26,    27,    10,    11,    27,    16,    14,
+      24,    27,    35,    27,     4,    23,     5,    25,    19,    27,
+      17,    18,    27,    31,    32,    33,    34,    35,    36,    16,
+      24,     8,    27,    20,    21,    22,    23,     9,    25,    16,
+      13,    40,    -1,    20,    21,    22,    23,    12,    25,    36,
+      49,    16,    -1,    52,    -1,    20,    21,    22,    23,    16,
+      25,    -1,    -1,    20,    21,    22,    23,    -1,    25
 };
 
   /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
@@ -635,26 +636,26 @@ static const yytype_uint8 yystos[] =
 {
        0,     3,    40,     4,    42,     0,    43,    41,    27,     5,
       17,    18,    44,     6,     7,    11,    14,    15,    27,    45,
-      27,    26,    27,    35,    50,    50,    50,    19,    24,    50,
-       8,    16,    20,    21,    22,    23,    25,    12,    50,    36,
-      46,    50,    50,    50,    50,    50,    50,    48,    44,    44,
-      47,    49,     9,    13,    44,    10
+      27,    26,    27,    35,    51,    48,    51,    19,    24,    51,
+       8,    16,    20,    21,    22,    23,    25,    51,    51,    36,
+      46,    51,    51,    51,    51,    51,    51,    12,    44,    49,
+      47,    44,     9,    50,    44,    13,    10
 };
 
   /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
 static const yytype_uint8 yyr1[] =
 {
        0,    39,    41,    40,    42,    42,    43,    43,    44,    44,
-      45,    46,    47,    45,    48,    49,    45,    45,    45,    45,
-      50,    50,    50,    50,    50,    50,    50,    50,    50
+      45,    46,    47,    45,    48,    49,    50,    45,    45,    45,
+      45,    51,    51,    51,    51,    51,    51,    51,    51,    51
 };
 
   /* YYR2[YYN] -- Number of symbols on the right hand side of rule YYN.  */
 static const yytype_uint8 yyr2[] =
 {
        0,     2,     0,     6,     4,     0,     3,     0,     3,     0,
-       3,     0,     0,     9,     0,     0,     7,     2,     2,     0,
-       1,     1,     3,     3,     3,     3,     3,     3,     3
+       3,     0,     0,     9,     0,     0,     0,     8,     2,     2,
+       0,     1,     1,     3,     3,     3,     3,     3,     3,     3
 };
 
 
@@ -1331,43 +1332,43 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 91 "comp.y" /* yacc.c:1660  */
+#line 94 "comp.y" /* yacc.c:1660  */
     { 
                                                                 pos += sprintf( machine_code + pos , "res\t\t%d\n" , data_offset/4);
                                                                 output_line_no++;
                                                             }
-#line 1340 "y.tab.c" /* yacc.c:1660  */
+#line 1341 "y.tab.c" /* yacc.c:1660  */
     break;
 
   case 3:
-#line 96 "comp.y" /* yacc.c:1660  */
+#line 99 "comp.y" /* yacc.c:1660  */
     {
                                                                 pos += sprintf( machine_code + pos , "halt\t\t0\n");
                                                                 output_line_no++;
                                                             }
-#line 1349 "y.tab.c" /* yacc.c:1660  */
+#line 1350 "y.tab.c" /* yacc.c:1660  */
     break;
 
   case 4:
-#line 101 "comp.y" /* yacc.c:1660  */
+#line 104 "comp.y" /* yacc.c:1660  */
     { 
                                                                 printf("\nIdentifier : %s", (yyvsp[-1].name));
                                                                 install((yyvsp[-1].name)); 
                                                             }
-#line 1358 "y.tab.c" /* yacc.c:1660  */
+#line 1359 "y.tab.c" /* yacc.c:1660  */
     break;
 
   case 6:
-#line 108 "comp.y" /* yacc.c:1660  */
+#line 111 "comp.y" /* yacc.c:1660  */
     { 
                                                                 printf("\nIdentifier : %s", (yyvsp[-1].name));
                                                                 install((yyvsp[-1].name)); 
                                                             }
-#line 1367 "y.tab.c" /* yacc.c:1660  */
+#line 1368 "y.tab.c" /* yacc.c:1660  */
     break;
 
   case 10:
-#line 119 "comp.y" /* yacc.c:1660  */
+#line 122 "comp.y" /* yacc.c:1660  */
     {
                                                                 ////context_check($1);
                                                                 pos += sprintf(machine_code + pos , "store\t\t%d\n" , (yyvsp[0].num));
@@ -1375,47 +1376,74 @@ yyreduce:
                                                                 put_symbol((yyvsp[-2].name), (yyvsp[0].num)); 
                                                                 output_line_no++;
                                                             }
-#line 1379 "y.tab.c" /* yacc.c:1660  */
+#line 1380 "y.tab.c" /* yacc.c:1660  */
     break;
 
   case 11:
-#line 127 "comp.y" /* yacc.c:1660  */
+#line 130 "comp.y" /* yacc.c:1660  */
     {
-                                                                pos += sprintf(machine_code + pos , "jmp_false\t\tL1\n");
+                                                                //Push 000, replace it with next line of goto
+                                                                push(pos + 11);
+                                                                pos += sprintf(machine_code + pos , "jmp_false\t\t000\n");
                                                                 output_line_no++;
                                                             }
-#line 1388 "y.tab.c" /* yacc.c:1660  */
+#line 1391 "y.tab.c" /* yacc.c:1660  */
     break;
 
   case 12:
-#line 132 "comp.y" /* yacc.c:1660  */
+#line 137 "comp.y" /* yacc.c:1660  */
     {
-										                        pos += sprintf(machine_code + pos , "goto\t\tL2\n");
+                                                                //Line after goto appear here
+                                                                replace(machine_code, pop(), output_line_no + 1);
+                                                                //Goto 000, replace it once you get 000
+                                                                push(pos + 6);
+
+										                        pos += sprintf(machine_code + pos , "goto\t\t000\n");
                                                                 output_line_no++;
                                                             }
-#line 1397 "y.tab.c" /* yacc.c:1660  */
+#line 1405 "y.tab.c" /* yacc.c:1660  */
+    break;
+
+  case 13:
+#line 147 "comp.y" /* yacc.c:1660  */
+    {
+                                                                replace(machine_code, pop(), output_line_no);
+                                                            }
+#line 1413 "y.tab.c" /* yacc.c:1660  */
     break;
 
   case 14:
-#line 138 "comp.y" /* yacc.c:1660  */
+#line 151 "comp.y" /* yacc.c:1660  */
     {
-                    										    pos += sprintf(machine_code+pos , "jmp_false\t\tL2\n");
-                                                                output_line_no++;
+                                                                push(output_line_no);
                                                             }
-#line 1406 "y.tab.c" /* yacc.c:1660  */
+#line 1421 "y.tab.c" /* yacc.c:1660  */
     break;
 
   case 15:
-#line 143 "comp.y" /* yacc.c:1660  */
+#line 155 "comp.y" /* yacc.c:1660  */
     {
-                                                                pos += sprintf(machine_code+pos , "goto\t\tL1\n");
+                                                                push(pos + 11);
+                    										    pos += sprintf(machine_code+pos , "jmp_false\t\t000\n");
                                                                 output_line_no++;
                                                             }
-#line 1415 "y.tab.c" /* yacc.c:1660  */
+#line 1431 "y.tab.c" /* yacc.c:1660  */
     break;
 
-  case 17:
-#line 149 "comp.y" /* yacc.c:1660  */
+  case 16:
+#line 161 "comp.y" /* yacc.c:1660  */
+    {
+                                                                int replace_pos = pop();
+                                                                pos += sprintf(machine_code+pos , "goto\t\t%03d\n", pop());
+                                                                output_line_no++;
+
+                                                                replace(machine_code, replace_pos, output_line_no);
+                                                            }
+#line 1443 "y.tab.c" /* yacc.c:1660  */
+    break;
+
+  case 18:
+#line 170 "comp.y" /* yacc.c:1660  */
     {   
                                                                 install((yyvsp[0].name));
                                                                 int offset = get_symbol((yyvsp[0].name))->data_offset/4; 
@@ -1423,107 +1451,107 @@ yyreduce:
 										                        pos += sprintf(machine_code + pos , "read\t\t%d\n" ,offset);
                                                                 output_line_no++;
                                                             }
-#line 1427 "y.tab.c" /* yacc.c:1660  */
+#line 1455 "y.tab.c" /* yacc.c:1660  */
     break;
 
-  case 18:
-#line 157 "comp.y" /* yacc.c:1660  */
+  case 19:
+#line 178 "comp.y" /* yacc.c:1660  */
     {
                                                                 pos += sprintf(machine_code+pos , "write\t\t0\n");
                                                                 output_line_no++;
                                                             }
-#line 1436 "y.tab.c" /* yacc.c:1660  */
+#line 1464 "y.tab.c" /* yacc.c:1660  */
     break;
 
-  case 20:
-#line 164 "comp.y" /* yacc.c:1660  */
+  case 21:
+#line 185 "comp.y" /* yacc.c:1660  */
     { 						
                                                                 pos += sprintf(machine_code+pos , "load_int\t\t%d\n" , (yyvsp[0].num));
                                                                 (yyval.num) = (yyvsp[0].num); 
                                                                 output_line_no++;
                                                             }
-#line 1446 "y.tab.c" /* yacc.c:1660  */
+#line 1474 "y.tab.c" /* yacc.c:1660  */
     break;
 
-  case 21:
-#line 170 "comp.y" /* yacc.c:1660  */
+  case 22:
+#line 191 "comp.y" /* yacc.c:1660  */
     {
                                                                 int offset = get_symbol((yyvsp[0].name))->data_offset/4;
     						                                    pos += sprintf(machine_code+pos , "load_var\t\t%d\n" , offset);
                                                                 (yyval.num) = (get_symbol((yyvsp[0].name))!= NULL)? get_symbol((yyvsp[0].name))->data:0;
                                                                 output_line_no++;
                                                             }
-#line 1457 "y.tab.c" /* yacc.c:1660  */
-    break;
-
-  case 22:
-#line 177 "comp.y" /* yacc.c:1660  */
-    {   (yyval.num) = (yyvsp[-1].num);    }
-#line 1463 "y.tab.c" /* yacc.c:1660  */
+#line 1485 "y.tab.c" /* yacc.c:1660  */
     break;
 
   case 23:
-#line 179 "comp.y" /* yacc.c:1660  */
+#line 198 "comp.y" /* yacc.c:1660  */
+    {   (yyval.num) = (yyvsp[-1].num);    }
+#line 1491 "y.tab.c" /* yacc.c:1660  */
+    break;
+
+  case 24:
+#line 200 "comp.y" /* yacc.c:1660  */
     {
     									                        pos += sprintf(machine_code+pos , "add\t\t0\n");
                                                                 (yyval.num) = (yyvsp[-2].num)+(yyvsp[0].num);
                                                                 output_line_no++;
                                                             }
-#line 1473 "y.tab.c" /* yacc.c:1660  */
+#line 1501 "y.tab.c" /* yacc.c:1660  */
     break;
 
-  case 24:
-#line 185 "comp.y" /* yacc.c:1660  */
+  case 25:
+#line 206 "comp.y" /* yacc.c:1660  */
     {
     									                        pos += sprintf(machine_code+pos , "mul\t\t0\n");
                                                                 (yyval.num) = (yyvsp[-2].num)*(yyvsp[0].num);
                                                                 output_line_no++;
                                                             }
-#line 1483 "y.tab.c" /* yacc.c:1660  */
+#line 1511 "y.tab.c" /* yacc.c:1660  */
     break;
 
-  case 25:
-#line 191 "comp.y" /* yacc.c:1660  */
+  case 26:
+#line 212 "comp.y" /* yacc.c:1660  */
     {
     									                        pos += sprintf(machine_code+pos , "sub\t\t0\n");
                                                                 (yyval.num) = (yyvsp[-2].num)-(yyvsp[0].num);
                                                                 output_line_no++;
                                                             }
-#line 1493 "y.tab.c" /* yacc.c:1660  */
+#line 1521 "y.tab.c" /* yacc.c:1660  */
     break;
 
-  case 26:
-#line 197 "comp.y" /* yacc.c:1660  */
+  case 27:
+#line 218 "comp.y" /* yacc.c:1660  */
     {
     									                        pos += sprintf(machine_code+pos , "div\t\t0\n");
                                                                 (yyval.num) = (yyvsp[-2].num)/(yyvsp[0].num);
                                                                 output_line_no++;
                                                             }
-#line 1503 "y.tab.c" /* yacc.c:1660  */
+#line 1531 "y.tab.c" /* yacc.c:1660  */
     break;
 
-  case 27:
-#line 203 "comp.y" /* yacc.c:1660  */
+  case 28:
+#line 224 "comp.y" /* yacc.c:1660  */
     {
     									                        pos += sprintf(machine_code+pos , "lt\t\t0\n");
                                                                 (yyval.num) = (yyvsp[-2].num)<(yyvsp[0].num);
                                                                 output_line_no++;
                                                             }
-#line 1513 "y.tab.c" /* yacc.c:1660  */
+#line 1541 "y.tab.c" /* yacc.c:1660  */
     break;
 
-  case 28:
-#line 209 "comp.y" /* yacc.c:1660  */
+  case 29:
+#line 230 "comp.y" /* yacc.c:1660  */
     {
     									                        pos += sprintf(machine_code+pos , "gt\t\t0\n");
                                                                 (yyval.num) = (yyvsp[-2].num)>(yyvsp[0].num);
                                                                 output_line_no++;
                                                             }
-#line 1523 "y.tab.c" /* yacc.c:1660  */
+#line 1551 "y.tab.c" /* yacc.c:1660  */
     break;
 
 
-#line 1527 "y.tab.c" /* yacc.c:1660  */
+#line 1555 "y.tab.c" /* yacc.c:1660  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1750,7 +1778,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 216 "comp.y" /* yacc.c:1903  */
+#line 237 "comp.y" /* yacc.c:1903  */
 
 
 // struct sym{
@@ -1840,6 +1868,35 @@ void write_machine_code()
 	}
 }
 
+void write_machine_code_to_file(const char* filename){
+	FILE *output = fopen(filename , "w");
+	fprintf(output , "%s", machine_code);
+	fclose(output);
+}
+
+void push(int pos){
+	struct stack_node *node = (struct stack_node*)malloc(sizeof(struct stack_node));
+	node->pos = pos;
+	node->next = stack_top;
+	stack_top = node;
+}
+
+int pop(){
+	if(stack_top == 0)
+		return -1;
+	int pos = stack_top->pos;
+	struct stack_node* node = stack_top;
+	stack_top = stack_top->next;
+	free(node);
+	return pos;
+}
+
+void replace(char str[] , int pos , int n){
+	str[pos]   = n/100 + '0';
+	str[pos+1] = (n%100) / 10 + '0';
+	str[pos+2] = (n%10) + '0';
+}
+
 int main()
 {
     sym_record = (struct sym_rec *)malloc(sizeof(struct sym_rec));
@@ -1851,6 +1908,6 @@ int main()
     printf("\nThe program was successfully parsed and accepted\n");
     displaySymTab();
     write_machine_code();
-
+    write_machine_code_to_file("machine_code");
     return 0; 
 }
