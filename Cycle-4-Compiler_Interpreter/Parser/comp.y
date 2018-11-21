@@ -45,6 +45,7 @@
 {
   char *name;
   int num; 
+  int offset;
 }
 
 %token PROG
@@ -138,9 +139,10 @@ command : IDENTI EQUAL expression                           {
           EWHILE                
 
         | READ IDENTI                                       {   
-                                                                install($2); 
+                                                                install($2);
+                                                                int offset = get_symbol($2)->data_offset/4; 
                                                                 //context_check(lastID);
-										                        pos += sprintf(machine_code + pos , "read\t\t%d\n" , $2);
+										                        pos += sprintf(machine_code + pos , "read\t\t%d\n" ,offset);
                                                             }
 
         | WRITE expression                                  {
@@ -155,7 +157,8 @@ expression : NUM                                            {
                                                             }
 
 | IDENTI                                                    {
-    						                                    pos += sprintf(machine_code+pos , "load_var\t%d\n" , $1);
+                                                                int offset = get_symbol($1)->data_offset/4;
+    						                                    pos += sprintf(machine_code+pos , "load_var\t%d\n" , offset);
                                                                 $$ = (get_symbol($1)!= NULL)? get_symbol($1)->data:0;
                                                             }
 

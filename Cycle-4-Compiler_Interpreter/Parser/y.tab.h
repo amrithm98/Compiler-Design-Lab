@@ -111,8 +111,9 @@ union YYSTYPE
 
   char *name;
   int num; 
+  int offset;
 
-#line 116 "y.tab.h" /* yacc.c:1912  */
+#line 117 "y.tab.h" /* yacc.c:1912  */
 };
 
 typedef union YYSTYPE YYSTYPE;
