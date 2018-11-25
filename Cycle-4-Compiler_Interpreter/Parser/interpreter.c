@@ -68,7 +68,7 @@ int main(int argc , char** argv)
         strcpy(opcode , code_seg[line].opcode);
         operand = code_seg[line].operand;
 
-        // printf("%d %s  %d\n" , line ,opcode , operand);
+        printf("%d %s  %d\n" , line ,opcode , operand);
 
         switch(convert_opcode(opcode)){
 

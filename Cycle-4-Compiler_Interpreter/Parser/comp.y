@@ -79,8 +79,6 @@
 %type<num> expression NUM
 %type<name> IDENTI
 
-%left '|'
-%left '&'
 %left '+' '-'
 %left '*' '/' '%'
 %left '(' ')'
