@@ -8,7 +8,7 @@ rm y.tab.h
 lex comp.l
 yacc -d comp.y
 g++ lex.yy.c y.tab.c -o mc
-./mc < sample.i
+./mc < inp.i
 
 gcc interpreter.c -o interp
 ./interp machine_code

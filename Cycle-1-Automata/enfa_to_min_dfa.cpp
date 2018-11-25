@@ -14,7 +14,19 @@
  * 
  * */
 
-#include <bits/stdc++.h>
+#include <iostream>
+#include <map>
+#include <set>
+#include <queue>
+#include <unordered_map>
+#include <unordered_set>
+#include <stack>
+#include <vector>
+#include <fstream>
+#include <algorithm>
+#include <utility>
+#include <string>
+#include <sstream>
 using namespace std;
 
 //Must be declared First
@@ -302,16 +314,20 @@ class ENFA
             {
                 for(int j = 0; j < num_alphabets; j++)
                 {
-                    printf("\ndelta(%d,%d): { ",i,j);
-                    for(int k = 0; k < table[i][j].size(); k++)
-                        cout << table[i][j][k] << " ";
-                    cout << "} " << endl;
+                    if(table[i][j].size() != 0)
+                    {
+                        printf("\ndelta(%d,%d): { ",i,j);
+                        for(int k = 0; k < table[i][j].size(); k++)
+                            cout << table[i][j][k] << " ";
+                        cout << "} ";
+                    }
+                    
                 }
             }
             printf("\nFinal States : { ");
             for(auto it : finalStates)
                 cout << it << " ";
-            cout << "} \n";            
+            cout << "}";            
         }
 
         /***

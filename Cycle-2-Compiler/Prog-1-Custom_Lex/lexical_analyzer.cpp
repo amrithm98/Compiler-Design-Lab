@@ -1,3 +1,11 @@
+/**
+ * Author : Amrith M
+ * This code tokenizes the given program and prints what each token is
+ * This code is written in c++ and uses regex library
+ * regex_match is used to match regexp with string
+ * 
+ * 
+ * */
 #include <bits/stdc++.h>
 using namespace std;
 
