@@ -1,7 +1,10 @@
 %{
     #include<stdio.h>
-    #include<stdlib.>
-    int yylineno;
+    #include<stdlib.h>
+    #include<string>
+    #include<iostream>
+    #include "y.tab.h"
+    using namespace std;
 %}
 
 %option noyywrap
@@ -14,6 +17,7 @@ digit [0-9]
 "begin"         {   return BEG; }
 "then"          {   return THEN; }
 "if"            {   return IF; }
+"read"          {   return READ;}
 "else"          {   return ELSE; }
 "endif"         {   return EIF; }
 "endwhile"      {   return EWHILE; }
@@ -28,10 +32,10 @@ digit [0-9]
 "="             {   return EQUAL; }
 "<"             {   return LT; }
 ">"             {   return GT; }
-[-+/*)()]       {   return yytext[0]; }
+[-+/*)(]        {   return yytext[0]; }
 "write"         {   return WRITE;   }
 {letter}({letter}|{digit})* {   yylval.name = strdup(yytext); return ID;  }
-[0-9]+          {   yylval.num = atoi(yytext); return NUM; }
-[ \t]           {   ;   }
+[0-9]+          {   yylval.value = atoi(yytext); return NUM; }
+[. \t]          {   ;   }
 [\n]            {   yylineno++; }
 %%

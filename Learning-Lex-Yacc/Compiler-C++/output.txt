@@ -1,0 +1,14 @@
+
+RESULT : Successfully Parsed the Given Program 
+
+SYMBOL TABLE 
+============ 
+Name 		 Offset
+----- 		 -------
+b		1
+a		0
+
+MACHINE CODE 
+============= 
+OpCode 		 Operand
+------ 		 -------
