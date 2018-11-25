@@ -10,3 +10,6 @@ lex rules.l
 g++ lex.yy.c y.tab.c  -o machine_code
 ./machine_code < input.txt > output.txt
 cat output.txt
+
+g++ interpreter.cpp -o interpreter
+./interpreter machinecode.txt

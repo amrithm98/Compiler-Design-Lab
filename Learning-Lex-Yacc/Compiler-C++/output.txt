@@ -10,5 +10,32 @@ a		0
 
 MACHINE CODE 
 ============= 
-OpCode 		 Operand
------- 		 -------
+Line 	 OpCode 	Operand
+----- 	 ------ 	-------
+0 	 res 	 	2
+1 	 read 	 	0
+2 	 load_var 	0
+3 	 load_int 	10
+4 	 lt 	 	0
+5 	 jmp_false 	 	10
+6 	 load_int 	1
+7 	 store 	 	1
+8 	 goto 	 	10
+9 	 load_var 	0
+10 	 load_int 	10
+11 	 lt 	 	0
+12 	 jmp_false 	 	23
+13 	 load_int 	5
+14 	 load_var 	0
+15 	 mul 	 	0
+16 	 store 	 	1
+17 	 load_var 	0
+18 	 load_int 	1
+19 	 add 	 	0
+20 	 store 	 	0
+21 	 goto 	 	9
+22 	 load_var 	0
+23 	 write 	 	0
+24 	 load_var 	1
+25 	 write 	 	0
+26 	 halt 	 	0
