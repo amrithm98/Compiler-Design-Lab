@@ -13,7 +13,7 @@ lt 0
 jmp_false 23
 load_int 5
 load_var 0
-mul 0
+add 0
 store 1
 load_var 0
 load_int 1

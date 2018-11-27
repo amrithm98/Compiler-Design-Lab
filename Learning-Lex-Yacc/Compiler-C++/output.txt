@@ -27,7 +27,7 @@ Line 	 OpCode 	Operand
 12 	 jmp_false 	 	23
 13 	 load_int 	5
 14 	 load_var 	0
-15 	 mul 	 	0
+15 	 add 	 	0
 16 	 store 	 	1
 17 	 load_var 	0
 18 	 load_int 	1

@@ -1,0 +1,6 @@
+S
+S=AB
+A=aAb
+A=ab
+B=cBd
+B=cd
